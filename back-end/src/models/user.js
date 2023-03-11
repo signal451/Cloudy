@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     password: String,
     email: { type: String, unique: true },
     role: String,
+    subscription: Boolean,
     created_date: Date,
   },
   { versionKey: false }

@@ -2,6 +2,7 @@ import Joi from "joi"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import User from "../models/user.js"
+import { json } from "express"
 
 const logIn = async (req, res) => {
   const schema = Joi.object({
@@ -48,6 +49,7 @@ const logIn = async (req, res) => {
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
+    subscription: user.subscription,
     accessToken: token,
   })
 }
@@ -89,24 +91,19 @@ const signUp = async (req, res) => {
 
     userData.created_date = getCurrentDate()
     userData.password = hash
+    userData.subscription = false
 
     const user = new User(userData)
-    await User.exists({ email: userData.email }, (err, exist) => {
-      if (exist) {
-        res.status(400).send(`This email account already exist`)
-      } else {
-        user.save((err) => {
-          if (err) {
-            console.error(err)
-            res.status(500).send(err)
-          } else return res.json(user)
-        })
-      }
-    })
+    const isExist = await User.exists({ email: userData.email })
+    if (isExist) {
+      return res.status(400).send(`This email account already exist`)
+    }
+    user.save()
+    res.json(user)
   } catch (err) {
     // * format to custom error message
     console.error(err)
-    res.status(400).send(err)
+    res.status(400).send(err.message)
   }
 }
 
