@@ -19,21 +19,22 @@ const logIn = async (req, res) => {
         "string.pattern.base": `password must be between 6 to 21 digit and no special characters`,
       }),
   })
-  const { email, password } = req.body
-  const { data, error } = schema.validate({
-    email: email,
-    password: password,
+
+  const { value, error } = schema.validate({
+    email: req.body.email,
+    password: req.body.password,
   })
   if (error) {
     // custom error message format ... when there's error in request
     return res.status(400).send(error)
   }
-  const user = await User.findOne({ email: email })
+
+  const user = await User.findOne({ email: value.email })
   if (!user) {
     return res.status(404).send({ message: "User not found" })
   }
 
-  const isMatch = await bcrypt.compare(password, user.password)
+  const isMatch = await bcrypt.compare(value.password, user.password)
   if (!isMatch) {
     return res
       .status(401)
@@ -43,11 +44,11 @@ const logIn = async (req, res) => {
   const token = jwt.sign({ id: user._id }, process.env.SECRET_KEY, {
     expiresIn: 86400,
   })
-  res.status(200).json({
+
+  return res.status(200).json({
     id: user._id,
     username: user.username,
-    first_name: user.first_name,
-    last_name: user.last_name,
+    phone_number: user.phone_number,
     email: user.email,
     subscription: user.subscription,
     accessToken: token,
@@ -63,8 +64,9 @@ const getCurrentDate = () => {
 const signUp = async (req, res) => {
   const schema = Joi.object({
     username: Joi.string().required().min(3).max(30),
-    first_name: Joi.string().max(30).required(),
-    last_name: Joi.string().max(30).required(),
+    phone_number: Joi.string()
+      .pattern(/^[0-9]+$/)
+      .required(),
     email: Joi.string()
       .email({ tlds: { allow: ["com"] } })
       .required()
@@ -81,8 +83,7 @@ const signUp = async (req, res) => {
   try {
     const userData = await schema.validateAsync({
       username: req.body.username,
-      first_name: req.body.firstName,
-      last_name: req.body.lastName,
+      phone_number: req.body.phone_number,
       email: req.body.email,
       password: req.body.password,
     })
@@ -95,11 +96,13 @@ const signUp = async (req, res) => {
 
     const user = new User(userData)
     const isExist = await User.exists({ email: userData.email })
+
     if (isExist) {
-      return res.status(400).send(`This email account already exist`)
+      return res.status(400).send("user email already used")
     }
+
     user.save()
-    res.json(user)
+    return res.json(user)
   } catch (err) {
     // * format to custom error message
     console.error(err)

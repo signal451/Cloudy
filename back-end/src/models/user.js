@@ -1,10 +1,10 @@
 import mongoose, { version } from "mongoose"
 
+// i don't need to have first_name, last_name field
 const userSchema = new mongoose.Schema(
   {
     username: String,
-    first_name: String,
-    last_name: String,
+    phone_number: String,
     password: String,
     email: { type: String, unique: true },
     role: String,
