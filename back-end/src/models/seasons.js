@@ -3,19 +3,32 @@ import mongoose, { version } from "mongoose"
 const schema = new mongoose.Schema(
   {
     seasonNum: Number,
-    contentId: String,
+    contentId: {
+      type: String,
+      required: true,
+    },
     episode: [
       {
-        title: String,
+        title: {
+          type: String,
+          required: true,
+        },
         image: {
           uid: String,
           name: String,
+          url: String,
         },
         visible: Boolean,
-        user_id: String,
+        user_id: {
+          type: String,
+          required: true,
+        },
         upload_date: Date,
-        file: String,
-        isPaid: false,
+        file: {
+          type: String,
+          required: true,
+        },
+        isPaid: Boolean,
         subtitle: String,
       },
     ],

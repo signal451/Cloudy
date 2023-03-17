@@ -7,9 +7,10 @@ const schema = new mongoose.Schema(
     featured_image: {
       uid: String,
       name: String,
+      url: String,
     },
     isMovie: Boolean,
-    PG: String,
+    PG: Number,
   },
   { versionKey: false }
 )
