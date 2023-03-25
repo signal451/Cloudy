@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import { Input, FormControl, FormLabel, Button } from "@chakra-ui/react"
 
 import punk from "../assets/img/login.png"
-import { Form } from "react-router-dom"
 
 function App() {
   return (
@@ -22,7 +21,7 @@ function App() {
               <h1 className="mb-4 text-xl font-semibold text-gray-200 text-center">
                 Нэвтрэх
               </h1>
-              <Form>
+              <form>
                 <FormControl>
                   <FormLabel color={"whiteAlpha.700"}>Email</FormLabel>
                   <Input
@@ -50,7 +49,7 @@ function App() {
                     Нэвтрэх
                   </Button>
                 </FormControl>
-              </Form>
+              </form>
             </div>
           </main>
         </div>
