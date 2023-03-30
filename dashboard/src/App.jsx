@@ -1,22 +1,24 @@
 import { lazy } from "react"
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom"
-import Dashboard from "./pages/Dashboard"
-import Content from "./pages/Content"
 
 const Login = lazy(() => import("./pages/Login"))
 const Layout = lazy(() => import("./container/Layout"))
+const Content = lazy(() => import("./pages/Content"))
+const Dashboard = lazy(() => import("./pages/Dashboard"))
+const PageNotFound = lazy(() => import("./pages/PageNotFound"))
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/app" element={<Navigate to="/app/dashboard" />} />
-        <Route path="/app" element={<Layout />}>
-          <Route path="/app/dashboard" element={<Dashboard />} />
-          <Route path="/app/content" element={<Content />} />
+        <Route exact path="/app" element={<Navigate to="/app/dashboard" />} />
+        <Route exact path="/app" element={<Layout />}>
+          <Route exact path="/app/dashboard" element={<Dashboard />} />
+          <Route exact path="/app/content" element={<Content />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Navigate to="/login " />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/" element={<Navigate to="/login " />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   )

@@ -1,7 +1,7 @@
 import React from "react"
 // sidebar Internal rout
 import routes from "../../routes/sidebar"
-import { NavLink, Route } from "react-router-dom"
+import { NavLink, Route, Routes } from "react-router-dom"
 
 function SidebarContent() {
   return (

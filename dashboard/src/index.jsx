@@ -7,8 +7,10 @@ import "./assets/css/tailwind.css"
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <SidebarProvider>
-    <ChakraProvider>
-      <App />
-    </ChakraProvider>
+    <Suspense fallback={<div> Loading ... </div>}>
+      <ChakraProvider>
+        <App />
+      </ChakraProvider>
+    </Suspense>
   </SidebarProvider>
 )
