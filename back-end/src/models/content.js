@@ -9,7 +9,6 @@ const schema = new mongoose.Schema(
       name: String,
       url: String,
     },
-    isMovie: Boolean,
     PG: Number,
   },
   { versionKey: false }

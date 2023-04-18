@@ -29,7 +29,6 @@ function App() {
                     borderStyle={"none"}
                     background={"rgb(36, 38, 45)"}
                     focusBorderColor={"transparent"}
-                    placeholder={"enkhtugs@gmail.com"}
                     color={"whiteAlpha.700"}
                     type="email"
                   />

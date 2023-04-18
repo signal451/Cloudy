@@ -1,13 +1,17 @@
+import "dotenv/config"
 import mongoose from "mongoose"
 import express from "express"
 import cors from "cors"
-import "dotenv/config"
 import routers from "./src/routers/router.js"
 
 const app = express()
 
 //middlewares
-app.use(cors())
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+)
 app.use(express.json())
 
 const PORT = process.env.PORT || 3000

@@ -1,4 +1,4 @@
-import { FiHome, FiTv } from "react-icons/fi"
+import { FiHome, FiTv, FiUsers } from "react-icons/fi"
 
 const routes = [
   {
@@ -7,9 +7,14 @@ const routes = [
     name: "Нүүр",
   },
   {
+    path: "/app/users",
+    icon: <FiUsers className="w-5 h-5" />,
+    name: "Хэрэглэгч",
+  },
+  {
     path: "/app/content",
     icon: <FiTv className="w-5 h-5" />,
-    name: "Видео",
+    name: "Контент",
   },
 ]
 

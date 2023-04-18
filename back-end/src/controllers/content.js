@@ -3,7 +3,7 @@ import Content from "../models/content.js"
 import Seasons from "../models/seasons.js"
 import { json } from "express"
 
-const getContentDetails = async (req, res) => {
+const getContentList = async (req, res) => {
   // will be add pagination smh
   const list = await Content.find({})
   return res.json(list)
@@ -19,7 +19,7 @@ const getContentById = async (req, res) => {
   } catch (err) {
     console.error(err)
     return res.status(400).json({
-      message: "content didn't even exist dudex",
+      message: "content didn't even exist dude",
     })
   }
 }
@@ -30,6 +30,7 @@ const saveContentDetails = (req, res) => {
     title: Joi.string().required(),
     description: Joi.string().required(),
   })
+
   const { value, error } = schema.validate({
     title: req.body.title,
     description: req.body.description,
@@ -96,10 +97,23 @@ const saveContentEpisode = async (req, res) => {
 }
 
 // groupBySeason
-const getContentEpisodeBySeason = (req, res) => {}
+const getContentEpisodeBySeason = async (req, res) => {
+  const content = await Seasons.find({
+    contentId: req.params.id,
+    seasonNum: req.params.season,
+  })
+
+  if (content.length === 0) {
+    return res.status(404).json({
+      message: "couldn't find episode",
+    })
+  }
+
+  return res.json(content)
+}
 
 export {
-  getContentDetails,
+  getContentList,
   saveContentDetails,
   getContentById,
   getContentEpisodeBySeason,

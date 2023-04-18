@@ -33,7 +33,7 @@ function Dashboard() {
   return (
     <>
       <PageTitle> Үндсэн самбар </PageTitle>
-      <div className="grid gap-6 mb-8 md:grid-cols-2">
+      <div className="grid mt-5 gap-6 mb-8 md:grid-cols-2">
         <ChartCard title="Орлого">
           <Bar {...barOptions} />
         </ChartCard>

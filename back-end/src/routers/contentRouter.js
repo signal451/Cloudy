@@ -1,6 +1,6 @@
 import express from "express"
 import {
-  getContentDetails,
+  getContentList,
   saveContentDetails,
   getContentById,
   getContentEpisodeBySeason,
@@ -8,10 +8,10 @@ import {
 } from "../controllers/content.js"
 
 const router = express.Router()
-router.get("/", getContentDetails)
+router.get("/", getContentList)
 router.get("/:id", getContentById)
 router.post("/", saveContentDetails)
-router.get("/episode", getContentEpisodeBySeason)
-router.post("/episode", saveContentEpisode)
+router.get("/:id/:season", getContentEpisodeBySeason)
+router.post("/season/", saveContentEpisode)
 
 export default router
