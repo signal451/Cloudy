@@ -2,6 +2,7 @@ import Joi from "joi"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import User from "../models/user.js"
+import { getCurrentDate } from "../helper/util.js"
 import { json } from "express"
 
 const logIn = async (req, res) => {
@@ -53,12 +54,6 @@ const logIn = async (req, res) => {
     subscription: user.subscription,
     accessToken: token,
   })
-}
-
-const getCurrentDate = () => {
-  const date = new Date()
-  const formattedDate = date.toLocaleDateString()
-  return formattedDate
 }
 
 const signUp = async (req, res) => {

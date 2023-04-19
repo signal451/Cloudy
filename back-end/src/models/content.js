@@ -10,6 +10,7 @@ const schema = new mongoose.Schema(
       url: String,
     },
     PG: Number,
+    created_date: Date,
   },
   { versionKey: false }
 )

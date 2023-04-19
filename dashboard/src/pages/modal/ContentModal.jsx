@@ -22,6 +22,7 @@ function ContentModal(props) {
   const [fieldData, setFieldData] = useState({
     contentName: "",
     contentDescription: "",
+    image: null,
   })
 
   const handleField = (e) => {
@@ -32,13 +33,19 @@ function ContentModal(props) {
   }
 
   const submitHandler = () => {
-    console.log("dispach sended")
-    // serielize data to json
-    const serielized = JSON.stringify({
-      title: fieldData.contentName,
-      description: fieldData.contentDescription,
+    const form = new FormData()
+
+    form.append("title", fieldData.contentName)
+    form.append("description", fieldData.contentDescription)
+    form.append("image", fieldData.image)
+    dispatch(updateContent(form))
+  }
+
+  const handleImageChange = (e) => {
+    setFieldData({
+      ...fieldData,
+      image: e.target.files[0],
     })
-    dispatch(updateContent(serielized))
   }
 
   return (
@@ -109,10 +116,17 @@ function ContentModal(props) {
                         />
                       </svg>
                       <p className="mb-5 text-sm text-gray-400 group-hover:text-gray-600">
-                        Upload
+                        {fieldData.image == null
+                          ? "Upload"
+                          : fieldData.image.name}
                       </p>
                     </div>
-                    <input type="file" className="opacity-0" />
+                    <input
+                      type="file"
+                      name="image"
+                      className="opacity-0"
+                      onChange={handleImageChange}
+                    />
                   </label>
                 </div>
               </div>

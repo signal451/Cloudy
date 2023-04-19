@@ -67,12 +67,12 @@ function Content() {
                 </Th>
                 <Th>
                   <span className="block text-grayColor font-mono text-sm text-center">
-                    Оруулсан
+                    Ажилтан
                   </span>
                 </Th>
                 <Th>
                   <span className="block text-grayColor font-mono text-sm text-center">
-                    Улирал
+                    Огноо
                   </span>
                 </Th>
               </Tr>
@@ -93,7 +93,9 @@ function Content() {
                   </span>
                 </Td>
                 <Td>
-                  <span className="block text-grayColor text-center"> 4 </span>
+                  <span className="block text-grayColor text-center">
+                    2023-03-25
+                  </span>
                 </Td>
                 <Td>
                   <div className="flex items-center space-x-4">

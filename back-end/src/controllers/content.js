@@ -2,11 +2,55 @@ import Joi from "joi"
 import Content from "../models/content.js"
 import Seasons from "../models/seasons.js"
 import { json } from "express"
+import { getCurrentDate } from "../helper/util.js"
 
 const getContentList = async (req, res) => {
-  // will be add pagination smh
-  const list = await Content.find({})
-  return res.json(list)
+  const contents = await Seasons.aggregate([
+    {
+      $lookup: {
+        from: "contents",
+        localField: "contentId",
+        foreignField: "_id",
+        as: "content",
+      },
+    },
+    {
+      $unwind: "$content",
+    },
+    {
+      $group: {
+        _id: "$contentId",
+        contents: {
+          $push: {
+            seasonNum: "$seasonNum",
+            episode: "$episode",
+          },
+        },
+        content: {
+          $first: "$content",
+        },
+      },
+    },
+    {
+      $project: {
+        title: "$content.title",
+        description: "$content.description",
+        featured_image: "$content.featured_image",
+        totalEpisode: {
+          $sum: {
+            $map: {
+              input: "$contents",
+              as: "season",
+              in: {
+                $size: "$$season.episode",
+              },
+            },
+          },
+        },
+      },
+    },
+  ]).exec()
+  return res.json(contents)
 }
 
 const getContentById = async (req, res) => {
@@ -25,7 +69,10 @@ const getContentById = async (req, res) => {
 }
 
 const saveContentDetails = (req, res) => {
+  // handle data with multer
   // image save and upload to s3 bucket
+
+  console.log(req.body)
   const schema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
@@ -44,8 +91,7 @@ const saveContentDetails = (req, res) => {
     title: req.body.title,
     description: req.body.description,
     featured_image: req.body.featured_image,
-    isMovie: req.body.isMovie,
-    PG: req.body.PG,
+    created_date: getCurrentDate(),
   }
   const content = new Content(data)
   try {

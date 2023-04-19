@@ -7,11 +7,13 @@ import {
   saveContentEpisode,
 } from "../controllers/content.js"
 
+import { uploadImage } from "../middleware/upload.js"
+
 const router = express.Router()
 router.get("/", getContentList)
 router.get("/:id", getContentById)
-router.post("/", saveContentDetails)
+router.post("/", uploadImage.single("image"), saveContentDetails)
 router.get("/:id/:season", getContentEpisodeBySeason)
-router.post("/season/", saveContentEpisode)
+router.post("/season", saveContentEpisode)
 
 export default router

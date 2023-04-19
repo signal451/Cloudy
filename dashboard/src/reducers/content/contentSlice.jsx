@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { requestOptions, getApiUrl } from "../../services/base"
+
 import axios from "axios"
 
 const base = "content"
@@ -11,7 +12,7 @@ export const updateContent = createAsyncThunk(
     try {
       const response = await axios.post(`${getApiUrl()}${base}`, args, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       })
       return response.data
@@ -31,7 +32,6 @@ const contentSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(updateContent.fulfilled, (state, action) => {
       console.log("Successfully add content data")
-      // state.list.push(action.payload)
     })
   },
 })

@@ -1,11 +1,12 @@
-import mongoose, { version } from "mongoose"
+import mongoose, { Schema, version } from "mongoose"
 
 const schema = new mongoose.Schema(
   {
     seasonNum: Number,
     contentId: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
+      ref: "content",
     },
     episode: [
       {
