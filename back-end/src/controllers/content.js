@@ -1,55 +1,27 @@
 import Joi from "joi"
 import Content from "../models/content.js"
-import Seasons from "../models/seasons.js"
 import { json } from "express"
 import { getCurrentDate } from "../helper/util.js"
 
-const getContentList = async (req, res) => {
-  const contents = await Seasons.aggregate([
-    {
-      $lookup: {
-        from: "contents",
-        localField: "contentId",
-        foreignField: "_id",
-        as: "content",
-      },
-    },
-    {
-      $unwind: "$content",
-    },
-    {
-      $group: {
-        _id: "$contentId",
-        contents: {
-          $push: {
-            seasonNum: "$seasonNum",
-            episode: "$episode",
-          },
-        },
-        content: {
-          $first: "$content",
-        },
-      },
-    },
+// for mobile ???? aahhh
+const getContentList = async (req, res) => {}
+
+const getContentDetails = async (req, res) => {
+  // query
+  const pipeline = [
     {
       $project: {
-        title: "$content.title",
-        description: "$content.description",
-        featured_image: "$content.featured_image",
-        totalEpisode: {
-          $sum: {
-            $map: {
-              input: "$contents",
-              as: "season",
-              in: {
-                $size: "$$season.episode",
-              },
-            },
-          },
-        },
+        _id: 1,
+        title: 1,
+        description: 1,
+        featured_image: 1,
+        created_date: 1,
+        totalEpisode: { $size: "$episode" },
       },
     },
-  ]).exec()
+  ]
+
+  const contents = await Content.aggregate(pipeline).exec()
   return res.json(contents)
 }
 
@@ -69,10 +41,6 @@ const getContentById = async (req, res) => {
 }
 
 const saveContentDetails = (req, res) => {
-  // handle data with multer
-  // image save and upload to s3 bucket
-
-  console.log(req.body)
   const schema = Joi.object({
     title: Joi.string().required(),
     description: Joi.string().required(),
@@ -90,9 +58,14 @@ const saveContentDetails = (req, res) => {
   const data = {
     title: req.body.title,
     description: req.body.description,
-    featured_image: req.body.featured_image,
+    featured_image: {
+      name: req.file.originalname,
+      location: req.file.location,
+    },
+    episode: [],
     created_date: getCurrentDate(),
   }
+
   const content = new Content(data)
   try {
     content.save()
@@ -104,35 +77,17 @@ const saveContentDetails = (req, res) => {
 }
 
 const saveContentEpisode = async (req, res) => {
-  // I will be add some logic to it ensure to validate format..
-  const count = await Seasons.where({
-    contentId: req.body.contentId,
-    seasonNum: req.body.seasonNum,
-  }).count()
-  if (count === 0) {
-    const data = {
-      seasonNum: req.body.seasonNum,
-      contentId: req.body.contentId,
-      episode: req.body.episode,
-    }
-    const episode = new Seasons(data)
-    try {
-      episode.save()
-      return res.json(episode)
-    } catch (err) {
-      console.error(err)
-      return res.status(500).json({
-        message: "something went wrong while trying to upload",
-      })
-    }
-  }
   try {
-    await Seasons.updateOne(
-      { seasonNum: req.body.seasonNum, contentId: req.body.contentId },
-      { $push: { episode: req.body.episode } }
+    const content = await Content.updateOne(
+      {
+        _id: req.body.contentId,
+      },
+      {
+        $push: { episode: req.body.episode },
+      }
     )
     return res.json({
-      message: "new episode successfully added",
+      message: "Sucessfully add new episode to content",
     })
   } catch (err) {
     console.error(err)
@@ -142,26 +97,10 @@ const saveContentEpisode = async (req, res) => {
   }
 }
 
-// groupBySeason
-const getContentEpisodeBySeason = async (req, res) => {
-  const content = await Seasons.find({
-    contentId: req.params.id,
-    seasonNum: req.params.season,
-  })
-
-  if (content.length === 0) {
-    return res.status(404).json({
-      message: "couldn't find episode",
-    })
-  }
-
-  return res.json(content)
-}
-
 export {
   getContentList,
+  getContentDetails,
   saveContentDetails,
   getContentById,
-  getContentEpisodeBySeason,
   saveContentEpisode,
 }

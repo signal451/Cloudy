@@ -11,13 +11,16 @@ import {
   ModalContent,
   ModalFooter,
   Textarea,
+  useToast,
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { updateContent } from "../../reducers/content/contentSlice"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 function ContentModal(props) {
   const dispatch = useDispatch()
+  const toast = useToast()
+  const isLoading = useSelector((state) => state.content.loading)
 
   const [fieldData, setFieldData] = useState({
     contentName: "",
@@ -34,11 +37,28 @@ function ContentModal(props) {
 
   const submitHandler = () => {
     const form = new FormData()
-
     form.append("title", fieldData.contentName)
     form.append("description", fieldData.contentDescription)
     form.append("image", fieldData.image)
+
     dispatch(updateContent(form))
+
+    if (isLoading != true) {
+      toast({
+        title: "Контент амжилттай бүртгэгдсэн ",
+        description: fieldData.contentName,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+
+    // Modal close
+    setFieldData({
+      image: null,
+    })
+
+    return props.onClose()
   }
 
   const handleImageChange = (e) => {

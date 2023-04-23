@@ -21,7 +21,6 @@ const uploadImage = multer({
     bucket: process.env.AWS_BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     metadata: function (req, file, cb) {
-      console.log(file)
       cb(null, { fieldName: file.fieldname })
     },
     key: (req, file, cb) => {
