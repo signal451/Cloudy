@@ -18,7 +18,7 @@ import ContentModal from "./modal/ContentModal"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import { fetchContentDetails } from "../reducers/content/contentSlice"
-import moment from "moment"
+import { dateFormat } from "../utils/util"
 
 function Content() {
   const dispatch = useDispatch()
@@ -29,17 +29,6 @@ function Content() {
   useEffect(() => {
     dispatch(fetchContentDetails())
   }, [])
-
-  const dateFormat = (args) => {
-    const date = new Date(args)
-    const year = date.getFullYear()
-    const month = date.getMonth() + 1
-    const day = date.getDate()
-    const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${
-      day < 10 ? "0" : ""
-    }${day}`
-    return formattedDate
-  }
 
   return (
     <>
