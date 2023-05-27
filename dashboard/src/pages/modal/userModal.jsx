@@ -16,13 +16,20 @@ import {
 } from "@chakra-ui/react"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import { updateUserDetails } from "../../reducers/user/userSlice"
 
 const UserModal = (props) => {
+  const dispatch = useDispatch()
+  const toast = useToast()
+  const isLoading = useSelector((state) => state.user.loading)
+
   const [fieldData, setFieldData] = useState({
     username: "",
     email: "",
     password: "",
+    phone: "",
     profile_image: null,
+    role: "",
   })
 
   const handleField = (e) => {
@@ -39,7 +46,32 @@ const UserModal = (props) => {
     })
   }
 
-  const submitHandler = () => {}
+  const submitHandler = () => {
+    const form = new FormData()
+    form.append("username", fieldData.username)
+    form.append("email", fieldData.email)
+    form.append("phone_number", fieldData.phone)
+    form.append("password", fieldData.password)
+    form.append("role", fieldData.role)
+    form.append("profile_image", fieldData.profile_image)
+
+    dispatch(updateUserDetails(form))
+
+    if (isLoading != true) {
+      toast({
+        title: "Хэрэглэгч амжилттай бүртгэгдсэн ",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+
+    setFieldData({
+      image: null,
+    })
+
+    return props.onClose()
+  }
 
   return (
     <Modal
@@ -79,6 +111,19 @@ const UserModal = (props) => {
               focusBorderColor={"transparent"}
               color={"whiteAlpha.700"}
               name="email"
+              type="text"
+              onChange={handleField}
+            />
+          </FormControl>
+          <FormControl marginTop={5}>
+            <FormLabel color={"whiteAlpha.700"}> Утас </FormLabel>
+            <Input
+              boxShadow={"none"}
+              borderStyle={"none"}
+              background={"rgb(36, 38, 45)"}
+              focusBorderColor={"transparent"}
+              color={"whiteAlpha.700"}
+              name="phone"
               type="text"
               onChange={handleField}
             />
@@ -141,13 +186,13 @@ const UserModal = (props) => {
           <FormControl marginTop={5}>
             <FormLabel color={"whiteAlpha.700"}> Эрх</FormLabel>
             <Select
-              value={"Employee"}
-              placeContent={"Role"}
+              placeholder={"Системийн эрх олгох"}
               color={"whiteAlpha.700"}
               onChange={handleField}
+              name="role"
             >
-              <option value={"Employee"}>Ажилтан</option>
-              <option value={"User"}>Хэрэглэгч</option>
+              <option value={"employee"}>Ажилтан</option>
+              <option value={"user"}>Хэрэглэгч</option>
             </Select>
           </FormControl>
         </ModalBody>

@@ -5,7 +5,7 @@ const schema = new mongoose.Schema(
     title: String,
     description: String,
     featured_image: {
-      name: String,
+      key: String,
       location: String,
     },
     episode: [

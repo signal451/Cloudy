@@ -2,6 +2,8 @@ import Joi from "joi"
 import Content from "../models/content.js"
 import { json } from "express"
 import { getCurrentDate } from "../helper/util.js"
+import { s3 } from "../middleware/upload.js"
+import { DeleteObjectCommand } from "@aws-sdk/client-s3"
 
 // for mobile ???? aahhh
 const getContentList = async (req, res) => {}
@@ -55,11 +57,13 @@ const saveContentDetails = (req, res) => {
     return res.status(400).send(error)
   }
 
+  console.log(req.file)
+
   const data = {
     title: req.body.title,
     description: req.body.description,
     featured_image: {
-      name: req.file.originalname,
+      key: req.file.key,
       location: req.file.location,
     },
     episode: [],
@@ -97,10 +101,38 @@ const saveContentEpisode = async (req, res) => {
   }
 }
 
+const deleteContent = async (req, res) => {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+  })
+  const { error } = schema.validate({ id: req.body.id })
+  if (error) {
+    return res.status(400).send(error)
+  }
+  try {
+    // this shit returns something
+    const content = await Content.deleteOne({ _id: req.body.id })
+    const input = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: req.body.key,
+    }
+    const command = new DeleteObjectCommand(input)
+    await s3.send(command)
+
+    return res.json({
+      id: req.body.id,
+    })
+  } catch (err) {
+    console.error(err)
+    return res.status(400).send(error)
+  }
+}
+
 export {
   getContentList,
   getContentDetails,
   saveContentDetails,
   getContentById,
+  deleteContent,
   saveContentEpisode,
 }

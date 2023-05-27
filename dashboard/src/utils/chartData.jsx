@@ -1,6 +1,6 @@
 export const lineLegends = [
-  { title: "Organic", color: "bg-teal-600" },
-  { title: "Paid", color: "bg-purple-600" },
+  { title: "Төлбөр төлсөн", color: "bg-teal-600" },
+  { title: "Энгийн", color: "bg-purple-600" },
 ]
 
 export const barLegends = [
@@ -10,10 +10,18 @@ export const barLegends = [
 
 export const lineOptions = {
   data: {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: [
+      "2023-04-19",
+      "2023-04-20",
+      "2023-04-22",
+      "2023-04-23",
+      "2023-04-24",
+      "2023-04-25",
+      "2023-04-25",
+    ],
     datasets: [
       {
-        label: "Organic",
+        label: "Free",
         /**
          * These colors come from Tailwind CSS palette
          * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
@@ -24,7 +32,7 @@ export const lineOptions = {
         fill: false,
       },
       {
-        label: "Paid",
+        label: "Free",
         fill: false,
         /**
          * These colors come from Tailwind CSS palette
@@ -77,7 +85,28 @@ export const barOptions = {
         backgroundColor: "#7e3af2",
         // borderColor: window.chartColors.red,
         borderWidth: 1,
-        data: [-3, 14, 52, 74, 33, 90, 70],
+        data: [3000, 10000, 25000, 50000, 68000, 70000, 85000],
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+  },
+  legend: {
+    display: false,
+  },
+}
+
+export const viewBarOptions = {
+  data: {
+    labels: ["January", "February", "March", "April", "May"],
+    datasets: [
+      {
+        label: "Shoes",
+        backgroundColor: "#7e3af2",
+        // borderColor: window.chartColors.red,
+        borderWidth: 1,
+        data: [100, 500, 300, 150, 200],
       },
     ],
   },

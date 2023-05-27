@@ -76,24 +76,47 @@ const signUp = async (req, res) => {
       }),
   })
   try {
-    const userData = await schema.validateAsync({
+    const { value, error } = schema.validate({
       username: req.body.username,
       phone_number: req.body.phone_number,
       email: req.body.email,
       password: req.body.password,
     })
-    const saltRounds = 10
-    const hash = bcrypt.hashSync(userData.password.trim(), saltRounds)
 
-    userData.created_date = getCurrentDate()
-    userData.password = hash
-    userData.subscription = false
+    if (error) {
+      return res.status(400).send(error)
+    }
+
+    const saltRounds = 10
+
+    const hash = bcrypt.hashSync(req.body.password.trim(), saltRounds)
+
+    const userData = Object.assign({}, value, {
+      created_date: getCurrentDate(),
+      password: hash,
+      role:
+        req.body.role != undefined || req.body.length === 0
+          ? req.body.role
+          : "user",
+      subscription: false,
+    })
+
+    if (req.file != undefined) {
+      userData.profile_image = {
+        key: req.file.key,
+        location: req.file.location,
+      }
+    }
+
+    console.log(userData)
 
     const user = new User(userData)
     const isExist = await User.exists({ email: userData.email })
 
     if (isExist) {
-      return res.status(400).send("user email already used")
+      return res.status(400).json({
+        message: "user email already used",
+      })
     }
 
     user.save()
@@ -101,7 +124,9 @@ const signUp = async (req, res) => {
   } catch (err) {
     // * format to custom error message
     console.error(err)
-    res.status(400).send(err.message)
+    res.status(400).json({
+      message: err.message,
+    })
   }
 }
 

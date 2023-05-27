@@ -43,7 +43,7 @@ function Header() {
                   ml="2"
                 >
                   <Text fontSize="sm" color={"gray.200"}>
-                    Gankhuyg Enkhtugs
+                    Enkhtugs
                   </Text>
                   <Text fontSize="xs" color={"gray.100"}>
                     Админ

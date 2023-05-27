@@ -1,6 +1,5 @@
 import React, { useState } from "react"
 import { Input, FormControl, FormLabel, Button } from "@chakra-ui/react"
-
 import punk from "../assets/img/login.png"
 
 function App() {
@@ -29,6 +28,7 @@ function App() {
                     borderStyle={"none"}
                     background={"rgb(36, 38, 45)"}
                     focusBorderColor={"transparent"}
+                    placeholder="admin123@gmail.com"
                     color={"whiteAlpha.700"}
                     type="email"
                   />
@@ -39,12 +39,17 @@ function App() {
                     boxShadow={"none"}
                     borderStyle={"none"}
                     background={"rgb(36, 38, 45)"}
+                    placeholder="********"
                     focusBorderColor={"transparent"}
                     color={"whiteAlpha.700"}
                     type="password"
                   />
 
-                  <Button width={"100%"} marginTop={10}>
+                  <Button
+                    width={"100%"}
+                    marginTop={10}
+                    onClick={() => navigate("/app ")}
+                  >
                     Нэвтрэх
                   </Button>
                 </FormControl>

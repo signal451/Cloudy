@@ -14,7 +14,10 @@ import {
   useToast,
 } from "@chakra-ui/react"
 import { useState } from "react"
-import { updateContent } from "../../reducers/content/contentSlice"
+import {
+  fetchContentDetails,
+  updateContent,
+} from "../../reducers/content/contentSlice"
 import { useDispatch, useSelector } from "react-redux"
 
 function ContentModal(props) {
@@ -57,7 +60,6 @@ function ContentModal(props) {
     setFieldData({
       image: null,
     })
-
     return props.onClose()
   }
 

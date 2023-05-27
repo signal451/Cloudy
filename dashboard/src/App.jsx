@@ -6,6 +6,7 @@ const Layout = lazy(() => import("./container/Layout"))
 const Content = lazy(() => import("./pages/Content"))
 const ContentRegister = lazy(() => import("./pages/ContentRegister"))
 const Dashboard = lazy(() => import("./pages/Dashboard"))
+const Analytic = lazy(() => import("./pages/Analytic"))
 const Users = lazy(() => import("./pages/User"))
 const Page404 = lazy(() => import("./pages/Page404"))
 const PageNotFound = lazy(() => import("./pages/PageNotFound"))
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/app/dashboard" element={<Dashboard />} />
           <Route exact path="/app/content" element={<Content />} />
           <Route exact path="/app/users" element={<Users />} />
+          <Route exact path="/app/analytic" element={<Analytic />} />
           <Route path="/app/*" element={<Page404 />} />
         </Route>
         <Route exact path="/login" element={<Login />} />

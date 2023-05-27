@@ -1,4 +1,6 @@
-import { FiHome, FiTv, FiUsers } from "react-icons/fi"
+import { FiHome, FiTv, FiUsers, FiPieChart } from "react-icons/fi"
+
+// I need dropdown sidebar
 
 const routes = [
   {
@@ -15,6 +17,11 @@ const routes = [
     path: "/app/content",
     icon: <FiTv className="w-5 h-5" />,
     name: "Контент",
+  },
+  {
+    path: "/app/analytic",
+    icon: <FiPieChart className="w-5 h-5" />,
+    name: "Контент тойм",
   },
 ]
 

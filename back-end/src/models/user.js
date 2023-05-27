@@ -8,6 +8,10 @@ const schema = new mongoose.Schema(
     password: String,
     email: { type: String, unique: true },
     role: String,
+    profile_image: {
+      name: String,
+      location: String,
+    },
     subscription: Boolean,
     created_date: Date,
   },

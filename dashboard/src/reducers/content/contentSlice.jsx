@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { requestOptions, getApiUrl } from "../../services/base"
+import { getApiUrl } from "../../services/base"
 import axios from "axios"
-import { useToast } from "@chakra-ui/react"
 
 const base = "content"
 
@@ -17,6 +16,7 @@ export const updateContent = createAsyncThunk(
       return response.data
     } catch (err) {
       console.error(err)
+      return
     }
   }
 )
@@ -28,7 +28,27 @@ export const fetchContentDetails = createAsyncThunk(
       const response = await axios.get(`${getApiUrl()}${base}/details`)
       return response.data
     } catch (err) {
+      console.log(err)
+      return
+    }
+  }
+)
+
+export const deleteContent = createAsyncThunk(
+  "content/deleteContent",
+  async (payload) => {
+    const { id, key } = payload
+    try {
+      const response = await axios.delete(`${getApiUrl()}${base}`, {
+        data: {
+          id: id,
+          key: key,
+        },
+      })
+      return response.data
+    } catch (err) {
       console.error(err)
+      return
     }
   }
 )
@@ -38,6 +58,7 @@ const contentSlice = createSlice({
   initialState: {
     list: [],
     loading: false,
+    status: "",
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -49,12 +70,20 @@ const contentSlice = createSlice({
       state.list.push(action.payload)
     })
     builder.addCase(fetchContentDetails.pending, (state, action) => {
-      // how the fuck I'm gonna do loading animation shit ???
       state.loading = true
     })
     builder.addCase(fetchContentDetails.fulfilled, (state, action) => {
       state.loading = false
       state.list = action.payload
+    })
+    builder.addCase(deleteContent.fulfilled, (state, action) => {
+      state.status = "succeeded"
+      const { id } = action.payload
+      const oldContents = state.list.filter((content) => content._id !== id)
+      state.list = oldContents
+    })
+    builder.addCase(deleteContent.rejected, (state, action) => {
+      state.status = "failed"
     })
   },
 })
