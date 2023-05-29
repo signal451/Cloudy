@@ -7,19 +7,12 @@ const Preview = props => {
   const {navigator, thumbnail, title, file} = props;
   const episode_num = props.num + 1;
 
-  const [{subscription}] = useContext(AuthContext);
+  // const [{subscription}] = useContext(AuthContext);
 
   const checkSubscription = () => {
-    if (subscription.isSubscriptionActive) {
-      navigator.navigate('Watch', {
-        videoURL: file,
-      });
-    } else {
-      Toast.show({
-        type: 'error',
-        text1: 'Та эрхээ нээлгэж контент үзээрэй 😊',
-      });
-    }
+    navigator.navigate('Watch', {
+      videoURL: file,
+    });
   };
 
   return (

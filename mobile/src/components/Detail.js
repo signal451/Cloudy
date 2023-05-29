@@ -1,10 +1,11 @@
 import React from 'react';
 import ReadMore from '@fawazahmed/react-native-read-more';
 import {View, StyleSheet, Text, Image, Dimensions} from 'react-native';
-import PlayButton from './shared/PlayButton';
+import Icon from 'react-native-vector-icons/dist/Feather';
 import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
+import Button from './shared/Button';
 
-const {width, height} = Dimensions.get('screen');
+const {height} = Dimensions.get('screen');
 
 const Detail = route => {
   const {title, description, cover} = route.params;
@@ -31,7 +32,14 @@ const Detail = route => {
       </View>
       <View style={styles.container}>
         <Text style={styles.textTitle}> {title} </Text>
-        <PlayButton />
+        <Button
+          mode={'contained'}
+          text={'Шууд үзэх'}
+          color={'black'}
+          icon={'play'}
+          style={styles.playButton}
+        />
+
         <ReadMore
           numberOfLines={3}
           style={styles.textRegular}
@@ -39,6 +47,16 @@ const Detail = route => {
           seeLessStyle={styles.more}>
           {description}
         </ReadMore>
+        <View style={styles.addColection}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Icon name="check" size={30} color="white" />
+            <Text style={styles.textAddCollection}> Миний сан </Text>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -68,10 +86,26 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     fontSize: 15,
   },
+  playButton: {
+    marginTop: 20,
+    marginBottom: 5,
+    borderRadius: 5,
+    backgroundColor: 'white',
+  },
   textTitle: {
     fontFamily: 'Lato-Bold',
     fontSize: 30,
     color: 'white',
+  },
+  addColection: {
+    width: 100,
+
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  textAddCollection: {
+    color: 'white',
+    fontSize: 13,
   },
 });
 

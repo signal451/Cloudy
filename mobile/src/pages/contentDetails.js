@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import Detail from '../components/Detail';
 import Preview from '../components/shared/Preview';
 import axios from 'axios';
 
-// add data loading fetch loading indicator
 const Content = ({route, navigation}) => {
   const {showId} = route.params;
   const [data, setData] = useState({
@@ -14,45 +13,43 @@ const Content = ({route, navigation}) => {
     isLoading: true,
   });
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      setData({
-        isLoading: true,
+  const fetchDetails = useCallback(async () => {
+    setData({
+      isLoading: true,
+    });
+
+    const seasonList = await axios
+      .get(`http://10.0.2.2:3000/api/season/${showId}`)
+      .catch(function (err) {
+        if (err.response) {
+          console.log(err.response.status);
+        } else {
+          console.log('Error', err.message);
+        }
       });
 
-      // i need to handle this section
-      const seasonList = await axios
-        .get(`http://10.0.2.2:3000/api/season/${showId}`)
-        .catch(function (err) {
-          if (err.response) {
-            console.log(err.response.status);
-          } else {
-            console.log('Error', err.message);
-          }
-        });
-
-      // unhandled promise rejection here ... when data is not found seasonList is empty so it can't read data[0]
-      const episodelist = await axios
-        .get(
-          `http://10.0.2.2:3000/api/shows/${seasonList.data[0].season_num}/${showId}`,
-        )
-        .catch(function (err) {
-          if (err.response) {
-            console.log(err.response.status);
-          } else {
-            console.log('Error', err.message);
-          }
-        });
-
-      setData({
-        list: episodelist.data,
-        season: seasonList.data,
-        isLoading: false,
+    const episodelist = await axios
+      .get(
+        `http://10.0.2.2:3000/api/shows/${seasonList.data[0].season_num}/${showId}`,
+      )
+      .catch(function (err) {
+        if (err.response) {
+          console.log(err.response.status);
+        } else {
+          console.log('Error', err.message);
+        }
       });
-    };
 
-    fetchDetails();
+    setData({
+      list: episodelist.data,
+      season: seasonList.data,
+      isLoading: false,
+    });
   }, [showId]);
+
+  useEffect(() => {
+    fetchDetails();
+  }, [fetchDetails]);
 
   return (
     <View style={styles.container}>
@@ -71,7 +68,9 @@ const Content = ({route, navigation}) => {
         <FlatList
           horizontal={false}
           data={data.list}
-          ListHeaderComponent={<Detail {...route} />}
+          ListHeaderComponent={
+            <Detail {...route} navigator={navigation} file={data.list} />
+          }
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => {
             return (

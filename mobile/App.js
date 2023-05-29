@@ -1,4 +1,6 @@
 import React, {useState, createContext, useEffect} from 'react';
+import {StatusBar} from 'react-native';
+
 import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -48,6 +50,7 @@ const App = () => {
         icon: props => <FeatherIcon {...props} />,
       }}>
       <SafeAreaProvider>
+        <StatusBar backgroundColor={'#07080F'} />
         <NavigationContainer theme={Theme}>
           <AuthContext.Provider
             value={[{user, setUser, subscription, setSubscription}]}>

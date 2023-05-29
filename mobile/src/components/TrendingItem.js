@@ -1,5 +1,10 @@
 import React, {useContext} from 'react';
-import {StyleSheet, Image, Dimensions, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Image,
+  Dimensions,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {ShowsContext} from '../pages/home';
 
 const {height} = Dimensions.get('screen');
@@ -8,7 +13,7 @@ const TrendingItem = props => {
   const navigation = useContext(ShowsContext);
 
   return (
-    <TouchableOpacity
+    <TouchableWithoutFeedback
       style={styles.container}
       onPress={() =>
         navigation.navigate(props.navigateTo, {
@@ -24,7 +29,7 @@ const TrendingItem = props => {
           uri: props.trending_image,
         }}
       />
-    </TouchableOpacity>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -8,8 +8,8 @@ const Watch = ({route, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <OrientationLocker orientation={LANDSCAPE} />
       <Player url={videoURL} navigator={navigation} />
+      <OrientationLocker orientation={LANDSCAPE} />
     </View>
   );
 };

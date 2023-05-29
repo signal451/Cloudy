@@ -1,19 +1,28 @@
-import React, {createContext, useEffect, useState} from 'react';
-import {StatusBar, SafeAreaView, FlatList} from 'react-native';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {SafeAreaView, FlatList} from 'react-native';
 import Category from '../components/shared/Category';
-import axios from 'axios';
 import HorizontalList from '../components/shared/HorizontalList';
+import {AuthContext} from '../../App';
+import axios from 'axios';
 
 const ShowsContext = createContext(null);
 
 const Home = ({navigation}) => {
+  const [{user, setSubscription}] = useContext(AuthContext);
+
   const [data, setData] = useState({
     items: [],
     trending: [],
     isLoading: true,
   });
 
-  const fetchShows = async () => {
+  const fetchData = useCallback(async () => {
     setData({
       isLoading: true,
     });
@@ -28,31 +37,42 @@ const Home = ({navigation}) => {
         }
       });
 
+    const subscription = await axios
+      .get(`http://10.0.2.2:3000/api/subscription/${user.id}`)
+      .catch(function (err) {
+        if (err.response) {
+          console.log(err.response.status);
+        } else {
+          console.log('Error', err.message);
+        }
+      });
+
     let temp = [];
 
     if (shows.data) {
       for (const items of shows.data) {
         if (items.category === 'Онцлох') {
           temp = items.contents;
+          break;
         }
       }
     }
 
+    setSubscription(subscription.data);
     setData({
       items: shows.data,
       trending: temp,
       isLoading: false,
     });
-  };
+  }, [user.id, setSubscription]);
 
   useEffect(() => {
-    fetchShows();
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   return (
     <SafeAreaView>
       <ShowsContext.Provider value={navigation}>
-        <StatusBar backgroundColor={'#07080F'} />
         <FlatList
           horizontal={false}
           ListHeaderComponent={
@@ -70,7 +90,7 @@ const Home = ({navigation}) => {
             paddingBottom: 30,
           }}
           refreshing={data.isLoading}
-          onRefresh={fetchShows}
+          onRefresh={fetchData}
           keyExtractor={item => item.id.toString()}
         />
       </ShowsContext.Provider>

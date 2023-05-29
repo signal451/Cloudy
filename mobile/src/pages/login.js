@@ -5,7 +5,6 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
-  StatusBar,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../components/shared/Button';
@@ -82,7 +81,6 @@ const Login = ({navigation}) => {
     <KeyboardAvoidingView
       style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <StatusBar backgroundColor={'#07080F'} />
       <TextInput
         label="Phone"
         value={phone}
