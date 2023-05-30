@@ -34,7 +34,7 @@ const signUp = async (req, res) => {
         created_at: createdDate,
       }
 
-      const createNewUser = await prisma.client.create({ data: user })
+      await prisma.client.create({ data: user })
 
       return res.send({ message: "User successfully added" })
     }

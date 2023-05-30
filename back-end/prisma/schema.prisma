@@ -46,14 +46,6 @@ model genre {
   genre_has_show genre_has_show[]
 }
 
-model genre_has_show {
-  id       Int   @id @default(autoincrement())
-  genre_id Int
-  show_id  Int
-  shows    shows @relation(fields: [show_id], references: [show_id], onDelete: Cascade, map: "fk_multiple_show")
-  genre    genre @relation(fields: [genre_id], references: [genre_id], onDelete: Cascade, map: "fk_show_has_multiple_genre")
-}
-
 model my_library {
   library_id Int       @id @default(autoincrement())
   client_id  Int
@@ -132,4 +124,12 @@ model subtitle {
   subtitle_id Int        @id @default(autoincrement())
   name        String     @db.VarChar(20)
   episodes    episodes[]
+}
+
+model genre_has_show {
+  id       Int   @id @default(autoincrement())
+  genre_id Int
+  show_id  Int
+  shows    shows @relation(fields: [show_id], references: [show_id], onDelete: Cascade, map: "fk_multiple_show")
+  genre    genre @relation(fields: [genre_id], references: [genre_id], onDelete: Cascade, map: "fk_show_has_multiple_genre")
 }
