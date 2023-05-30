@@ -5,6 +5,6 @@ const router = express.Router()
 
 // CRUD OPERATIONS
 router.get("/", getAllShows)
-router.get("/:seasonId/:showId", getShowEpisodes)
+router.get("/:seasonNum/:showId", getShowEpisodes)
 
 module.exports = router
