@@ -1,0 +1,135 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model client {
+  client_id       Int             @id @default(autoincrement())
+  username        String          @db.VarChar(100)
+  phone_number    String          @unique @db.VarChar(8)
+  client_password String          @db.VarChar(80)
+  role_id         Int
+  profile_image   String?         @db.VarChar(255)
+  created_at      DateTime?       @db.Timestamp(6)
+  client_role     client_role     @relation(fields: [role_id], references: [role_id], onDelete: SetNull, map: "fk_client_role")
+  my_library      my_library[]
+  subscriptions   subscriptions[]
+}
+
+model client_role {
+  role_id   Int      @id @default(autoincrement())
+  role_name String   @db.VarChar(15)
+  client    client[]
+}
+
+model episodes {
+  episodes_id Int      @id @default(autoincrement())
+  title       String?  @db.VarChar(100)
+  season_id   Int
+  subtitle_id Int
+  duration    Int?
+  file        String?  @db.VarChar(255)
+  visible     String   @db.VarChar(15)
+  created_at  DateTime @db.Timestamp(6)
+  thumbnail   String?  @db.VarChar(255)
+  subtitle    subtitle @relation(fields: [subtitle_id], references: [subtitle_id], onDelete: SetNull, map: "fk_episode_category")
+  season      season   @relation(fields: [season_id], references: [season_id], onDelete: Cascade, map: "fk_episode_season")
+}
+
+model genre {
+  genre_id       Int              @id @default(autoincrement())
+  name           String           @db.VarChar(50)
+  genre_has_show genre_has_show[]
+}
+
+model genre_has_show {
+  id       Int   @id @default(autoincrement())
+  genre_id Int
+  show_id  Int
+  shows    shows @relation(fields: [show_id], references: [show_id], onDelete: Cascade, map: "fk_multiple_show")
+  genre    genre @relation(fields: [genre_id], references: [genre_id], onDelete: Cascade, map: "fk_show_has_multiple_genre")
+}
+
+model my_library {
+  library_id Int       @id @default(autoincrement())
+  client_id  Int
+  show_id    Int?      @unique(map: "unique_show")
+  created_at DateTime? @db.Timestamp(6)
+  client     client    @relation(fields: [client_id], references: [client_id], onDelete: Cascade, map: "fk_client_library")
+  shows      shows?    @relation(fields: [show_id], references: [show_id], onDelete: Cascade, map: "fk_library_show")
+}
+
+model payment {
+  id              Int            @id @default(autoincrement())
+  subscription_id Int?
+  amount          Int?
+  status          String?        @db.VarChar(10)
+  created_at      DateTime       @db.Timestamp(6)
+  subscriptions   subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: Cascade, map: "fk_payment_subscription")
+}
+
+model payment_method {
+  id          Int    @id @default(autoincrement())
+  method_name String @db.VarChar(20)
+}
+
+model season {
+  season_id Int        @id @default(autoincrement())
+  num       Int
+  show_id   Int
+  episodes  episodes[]
+  shows     shows      @relation(fields: [show_id], references: [show_id], onDelete: Cascade, map: "fk_season_show")
+}
+
+model shows {
+  show_id           Int              @id @default(autoincrement())
+  title             String           @unique(map: "unique_title") @db.VarChar(100)
+  description       String
+  featured_image    String           @db.VarChar(255)
+  visible           String           @db.VarChar(15)
+  created_at        DateTime?        @db.Timestamp(6)
+  status_id         Int
+  cover_image       String?          @db.VarChar
+  trending_image    String?          @db.VarChar(255)
+  subscription_type String?          @db.VarChar(5)
+  genre_has_show    genre_has_show[]
+  my_library        my_library?
+  season            season[]
+  status            status           @relation(fields: [status_id], references: [id], onDelete: SetNull, map: "fk_show_status")
+}
+
+model status {
+  id    Int     @id @default(autoincrement())
+  name  String  @db.VarChar(50)
+  shows shows[]
+}
+
+model subscription_plan {
+  id            Int             @id @default(autoincrement())
+  plan_details  String?         @unique @db.VarChar(10)
+  plan_price    Int?
+  subscriptions subscriptions[]
+}
+
+model subscriptions {
+  id                Int                @id @default(autoincrement())
+  client_id         Int
+  subscription_type String?            @db.VarChar(10)
+  start_date        DateTime           @db.Timestamp(6)
+  end_date          DateTime           @db.Timestamp(6)
+  plan_id           Int?
+  created_at        DateTime           @db.Timestamp(6)
+  payment           payment[]
+  client            client             @relation(fields: [client_id], references: [client_id], onDelete: Cascade, map: "fk_subscription_client")
+  subscription_plan subscription_plan? @relation(fields: [plan_id], references: [id], onDelete: Cascade, map: "fk_subscription_plan")
+}
+
+model subtitle {
+  subtitle_id Int        @id @default(autoincrement())
+  name        String     @db.VarChar(20)
+  episodes    episodes[]
+}

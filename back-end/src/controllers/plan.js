@@ -1,5 +1,3 @@
-const { pool } = require("../config/connect")
-
 const getAllSubscriptionPlans = async (req, res) => {
   try {
     const subscription_plan = await pool.query(

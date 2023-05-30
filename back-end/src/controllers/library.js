@@ -1,5 +1,3 @@
-const { pool } = require("../config/connect")
-
 const addShowToLibrary = async (req, res) => {
   try {
   } catch (err) {

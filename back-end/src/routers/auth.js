@@ -4,7 +4,6 @@ const { signUpValidation, logInValidation } = require("../middlewares/Validate")
 
 const router = express.Router()
 
-// CRUD OPERATION
 router.post("/signup", signUpValidation, signUp)
 router.post("/login", logInValidation, logIn)
 

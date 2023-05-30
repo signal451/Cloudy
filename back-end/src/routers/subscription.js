@@ -3,7 +3,7 @@ const {
   getUserSubscription,
   postUserSubscription,
 } = require("../controllers/subscription")
-const planRouter = require("./planRouter")
+const planRouter = require("./plan")
 
 const router = express.Router()
 

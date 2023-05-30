@@ -1,4 +1,3 @@
-const { pool } = require("../config/connect")
 const { calculateMonthDifferences, addMonth, addDays } = require("../util/util")
 
 const getAllSubscription = async (req, res) => {

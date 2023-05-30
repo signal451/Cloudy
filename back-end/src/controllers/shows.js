@@ -1,5 +1,3 @@
-const { pool } = require("../config/connect")
-
 const groupByGenre = (dt) => {
   let counter = 0
   const genres = []

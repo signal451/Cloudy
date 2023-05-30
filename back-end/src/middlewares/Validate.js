@@ -4,7 +4,11 @@ const logInValidation = (req, res, next) => {
   const schema = Joi.object({
     phone_number: Joi.string()
       .pattern(/^[0-9]+$/)
-      .required(),
+      .min(8)
+      .required()
+      .messages({
+        "any.required": "it phoneNumber cannot be empty",
+      }),
     password: Joi.string()
       .pattern(/^[a-zA-Z0-9_-]{6,25}$/)
       .required()
@@ -33,6 +37,7 @@ const signUpValidation = (req, res, next) => {
     username: Joi.string().required().min(3).max(15),
     phone_number: Joi.string()
       .pattern(/^[0-9]+$/)
+      .min(8)
       .required(),
     password: Joi.string()
       .pattern(/^[a-zA-Z0-9_-]{6,25}$/)

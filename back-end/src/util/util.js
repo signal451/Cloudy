@@ -1,9 +1,8 @@
 const moment = require("moment")
 
 const getCurrentDate = () => {
-  const date = new Date()
-  const formattedDate = date.toISOString().substring(0, 10)
-  return formattedDate
+  const currentDate = moment().toISOString()
+  return currentDate
 }
 
 const calculateMonthDifferences = (date) => {
