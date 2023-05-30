@@ -1,14 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReadMore from '@fawazahmed/react-native-read-more';
-import {View, StyleSheet, Text, Image, Dimensions} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/Feather';
 import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
 import Button from './shared/Button';
+import {Toast} from 'react-native-toast-message/lib/src/Toast';
 
 const {height} = Dimensions.get('screen');
 
 const Detail = route => {
   const {title, description, cover} = route.params;
+
+  const addToCollection = () => {
+    Toast.show({
+      type: 'info',
+      text1: 'Миний сан хэсэгт нэмэгдсэн',
+      position: 'bottom',
+      visibilityTime: 1500,
+    });
+  };
 
   return (
     <View>
@@ -47,7 +64,7 @@ const Detail = route => {
           seeLessStyle={styles.more}>
           {description}
         </ReadMore>
-        <View style={styles.addColection}>
+        <TouchableOpacity style={styles.addColection} onPress={addToCollection}>
           <View
             style={{
               justifyContent: 'center',
@@ -56,7 +73,7 @@ const Detail = route => {
             <Icon name="check" size={30} color="white" />
             <Text style={styles.textAddCollection}> Миний сан </Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -99,9 +116,7 @@ const styles = StyleSheet.create({
   },
   addColection: {
     width: 100,
-
     marginTop: 10,
-    marginBottom: 10,
   },
   textAddCollection: {
     color: 'white',
