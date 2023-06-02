@@ -7,7 +7,7 @@ const logInValidation = (req, res, next) => {
       .min(8)
       .required()
       .messages({
-        "any.required": "it phoneNumber cannot be empty",
+        "any.required": "phoneNumber cannot be empty",
       }),
     password: Joi.string()
       .pattern(/^[a-zA-Z0-9_-]{6,25}$/)

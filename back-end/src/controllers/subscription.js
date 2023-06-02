@@ -4,7 +4,6 @@ const getAllSubscription = async (req, res) => {
   console.log("user subscription list")
 }
 
-// error is here
 const postUserSubscription = async (req, res) => {
   const { client_id, plan_id, plan_detail } = req.body
   try {

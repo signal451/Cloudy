@@ -20,7 +20,6 @@ const getAllShows = async (req, res) => {
       },
     })
 
-    // filter empty ones
     const filteredShowList = shows.filter(
       (ele) => ele.genre_has_show.length > 0
     )
@@ -32,37 +31,6 @@ const getAllShows = async (req, res) => {
   }
 }
 
-const getShowEpisodes = async (req, res) => {
-  try {
-    let { showId, seasonNum } = req.params
-
-    const episodes = await prisma.episodes.findMany({
-      where: {
-        AND: [
-          {
-            season: {
-              season_id: parseInt(seasonNum),
-            },
-          },
-          {
-            season: {
-              shows: {
-                show_id: parseInt(showId),
-              },
-            },
-          },
-        ],
-      },
-    })
-
-    return res.json(episodes)
-  } catch (err) {
-    console.error(err)
-    return res.status(500).send({ message: "Something went wrong in server" })
-  }
-}
-
 module.exports = {
   getAllShows,
-  getShowEpisodes,
 }

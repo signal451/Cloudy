@@ -51,7 +51,7 @@ const signUp = async (req, res) => {
 const logIn = async (req, res) => {
   try {
     const { phone_number, password } = req.body
-    const user = await checkUserExist()
+    const user = await checkUserExist(phone_number)
 
     if (user == null) {
       return res.status(404).send({ message: "User not found" })
