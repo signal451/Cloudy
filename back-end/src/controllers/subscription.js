@@ -1,59 +1,92 @@
-const { calculateMonthDifferences, addMonth, addDays } = require("../util/util")
+const { prisma } = require("../config/client")
+const {
+  calculateMonthDifferences,
+  addMonth,
+  addDays,
+  getCurrentDate,
+} = require("../util/util")
 
-const getAllSubscription = async (req, res) => {
-  console.log("user subscription list")
+const checkSubscriptionIsExist = async (id) => {
+  const subscription = await prisma.subscriptions.findFirst({
+    select: {
+      id: true,
+      client_id: true,
+      start_date: true,
+      end_date: true,
+      created_at: true,
+    },
+    where: {
+      client_id: id,
+    },
+    orderBy: {
+      created_at: "desc",
+    },
+  })
+  return subscription
 }
 
 const postUserSubscription = async (req, res) => {
-  const { client_id, plan_id, plan_detail } = req.body
+  const { client_id, plan_id, payment } = req.body
   try {
-    const lastSubscription = await pool.query(
-      "select * from get_user_subscription($1)",
-      [client_id]
-    )
+    const subscription = await checkSubscriptionIsExist(parseInt(client_id))
+    const plan = await prisma.subscription_plan.findFirst({
+      where: {
+        id: plan_id,
+      },
+    })
 
-    if (lastSubscription.rowCount === 0) {
-      const end_date = addMonth(plan_detail[0], "current")
-
-      await await pool.query("call post_user_subscription($1, $2, $3)", [
-        client_id,
-        plan_id,
-        end_date,
-      ])
-
-      const lastSubscription = await pool.query(
-        "select * from get_user_subscription($1)",
-        [client_id]
-      )
-
-      return res.json({
-        id: lastSubscription.rows[0].id,
-        isSubscriptionActive: true,
-        totalDays: plan_detail[0] * 30,
+    if (plan == null) {
+      return res.status(404).json({
+        message: "subscription plan is not found",
       })
     }
 
+    if (subscription == null) {
+      const end_date = addMonth(plan.plan_details[0], "current")
+      await prisma.subscriptions
+        .create({
+          data: {
+            client_id: client_id,
+            start_date: getCurrentDate(),
+            end_date: end_date,
+            plan_id: plan_id,
+            created_at: getCurrentDate(),
+          },
+        })
+        .then((response) => {
+          return res.json({
+            id: response.id,
+            isSubscriptionActive: true,
+          })
+        })
+        .catch((err) => {
+          console.log("subscription avahad aldaa garlaa")
+          console.error(err)
+        })
+    }
+    // something is wrong there cuz full one day date is not correctly calculating
     const leftOverDate = addDays(
-      calculateMonthDifferences(lastSubscription.rows[0].end_date)
+      calculateMonthDifferences(subscription.end_date)
     )
 
-    const updatedDate = addMonth(leftOverDate, "new", plan_detail[0])
-    await pool
-      .query("call post_user_subscription($1, $2, $3)", [
-        client_id,
-        plan_id,
-        updatedDate,
-      ])
+    const updatedDate = addMonth(leftOverDate, "new", plan.plan_details[0])
+
+    await prisma.subscriptions
+      .create({
+        data: {
+          client_id: client_id,
+          start_date: getCurrentDate(),
+          end_date: updatedDate,
+          plan_id: plan_id,
+          created_at: getCurrentDate(),
+        },
+      })
       .then((response) => {
         return res.json({
-          id: lastSubscription.rows[0].id + 1,
+          id: response.id,
           isSubscriptionActive: true,
           totalDays: calculateMonthDifferences(updatedDate),
         })
-      })
-      .catch((err) => {
-        console.error(err)
-        return res.status(400).send("Error executing query")
       })
   } catch (err) {
     console.error(err)
@@ -63,26 +96,28 @@ const postUserSubscription = async (req, res) => {
 
 const getUserSubscription = async (req, res) => {
   try {
-    const lastSubscription = await pool.query(
-      "select * from get_user_subscription($1)",
-      [req.params.userId]
-    )
-    if (lastSubscription.rowCount === 0) {
+    const { userId } = req.params
+    const subscription = await checkSubscriptionIsExist(parseInt(userId))
+
+    if (subscription == null) {
       return res.json({
         isSubscriptionActive: false,
         totalDays: 0,
       })
     }
 
-    const total = calculateMonthDifferences(lastSubscription.rows[0].end_date)
+    const total = calculateMonthDifferences(subscription.end_date)
 
     if (total > 0) {
       return res.send({
+        id: subscription.id,
         isSubscriptionActive: true,
         totalDays: total,
       })
     } else {
+      // this means subscription is ended
       return res.send({
+        id: subscription.id,
         isSubscriptionActive: false,
         totalDays: 0,
       })
@@ -94,7 +129,6 @@ const getUserSubscription = async (req, res) => {
 }
 
 module.exports = {
-  getAllSubscription,
   getUserSubscription,
   postUserSubscription,
 }

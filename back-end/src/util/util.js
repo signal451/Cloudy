@@ -16,8 +16,7 @@ const addMonth = (date, type, date2) => {
     const currentDate = moment().toISOString()
     return moment(currentDate).add(date, "M").toISOString()
   }
-  const test = moment(date).add(date2, "M").toISOString()
-  return test
+  return moment(date).add(date2, "M").toISOString()
 }
 
 const addDays = (date) => {

@@ -7,9 +7,8 @@ const planRouter = require("./plan")
 
 const router = express.Router()
 
-// sub router
 router.use("/plan", planRouter)
-// subscription router
+// subscription CRUD router
 router.get("/:userId", getUserSubscription)
 router.post("/", postUserSubscription)
 

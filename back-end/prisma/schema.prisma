@@ -64,11 +64,6 @@ model payment {
   subscriptions   subscriptions? @relation(fields: [subscription_id], references: [id], onDelete: Cascade, map: "fk_payment_subscription")
 }
 
-model payment_method {
-  id          Int    @id @default(autoincrement())
-  method_name String @db.VarChar(20)
-}
-
 model season {
   season_id Int        @id @default(autoincrement())
   num       Int
@@ -110,7 +105,6 @@ model subscription_plan {
 model subscriptions {
   id                Int                @id @default(autoincrement())
   client_id         Int
-  subscription_type String?            @db.VarChar(10)
   start_date        DateTime           @db.Timestamp(6)
   end_date          DateTime           @db.Timestamp(6)
   plan_id           Int?

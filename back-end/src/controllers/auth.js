@@ -28,7 +28,7 @@ const signUp = async (req, res) => {
         username: username,
         phone_number: phone_number,
         client_password: passwordHash,
-        role_id: 3,
+        role_id: 2,
         profile_image:
           "https://d2z1yxiqvuf8s3.cloudfront.net/profile/blank_user.jpg",
         created_at: createdDate,
