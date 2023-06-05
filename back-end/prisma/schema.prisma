@@ -73,20 +73,19 @@ model season {
 }
 
 model shows {
-  show_id           Int              @id @default(autoincrement())
-  title             String           @unique(map: "unique_title") @db.VarChar(100)
-  description       String
-  featured_image    String           @db.VarChar(255)
-  visible           String           @db.VarChar(15)
-  created_at        DateTime?        @db.Timestamp(6)
-  status_id         Int
-  cover_image       String?          @db.VarChar
-  trending_image    String?          @db.VarChar(255)
-  subscription_type String?          @db.VarChar(5)
-  genre_has_show    genre_has_show[]
-  my_library        my_library?
-  season            season[]
-  status            status           @relation(fields: [status_id], references: [id], onDelete: SetNull, map: "fk_show_status")
+  show_id        Int              @id @default(autoincrement())
+  title          String           @unique(map: "unique_title") @db.VarChar(100)
+  description    String
+  featured_image String           @db.VarChar(255)
+  visible        String           @db.VarChar(15)
+  created_at     DateTime?        @db.Timestamp(6)
+  status_id      Int
+  cover_image    String?          @db.VarChar
+  trending_image String?          @db.VarChar(255)
+  genre_has_show genre_has_show[]
+  my_library     my_library?
+  season         season[]
+  status         status           @relation(fields: [status_id], references: [id], onDelete: SetNull, map: "fk_show_status")
 }
 
 model status {

@@ -49,15 +49,6 @@ const Home = ({navigation}) => {
 
     let temp = [];
 
-    if (shows.data) {
-      for (const items of shows.data) {
-        if (items.category === 'Онцлох') {
-          temp = items.contents;
-          break;
-        }
-      }
-    }
-
     setSubscription(subscription.data);
     setData({
       items: shows.data,

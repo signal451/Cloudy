@@ -7,8 +7,7 @@ const getCurrentDate = () => {
 
 const calculateMonthDifferences = (date) => {
   const currentDate = moment().toISOString()
-  const endDate = moment(date).toISOString()
-  return moment(endDate).diff(currentDate, "d")
+  return moment(date).diff(currentDate, "d")
 }
 
 const addMonth = (date, type, date2) => {
