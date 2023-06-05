@@ -9,16 +9,16 @@ const Content = ({route, navigation}) => {
   const {showId} = route.params;
   const [data, setData] = useState({
     list: [],
-    season: [],
+    totalSeason: [],
     isLoading: true,
   });
 
-  const fetchDetails = useCallback(async () => {
+  const fetchEpisodes = useCallback(async () => {
     setData({
       isLoading: true,
     });
 
-    const seasonList = await axios
+    const seasons = await axios
       .get(`http://10.0.2.2:3000/api/season/${showId}`)
       .catch(function (err) {
         if (err.response) {
@@ -28,28 +28,36 @@ const Content = ({route, navigation}) => {
         }
       });
 
-    const episodelist = await axios
-      .get(
-        `http://10.0.2.2:3000/api/shows/${seasonList.data[0].season_num}/${showId}`,
-      )
-      .catch(function (err) {
-        if (err.response) {
-          console.log(err.response.status);
-        } else {
-          console.log('Error', err.message);
-        }
-      });
+    if (seasons.data.length > 0) {
+      // if there's season exist then we gotta fetch episode data
+      const episodes = await axios
+        .get(`http://10.0.2.2:3000/api/season/${seasons.data[0].num}`)
+        .catch(function (err) {
+          if (err.response) {
+            // server error response ...
+            console.log(err.response.status);
+          } else {
+            console.log('Error', err.message);
+          }
+        });
 
-    setData({
-      list: episodelist.data,
-      season: seasonList.data,
-      isLoading: false,
-    });
+      setData({
+        list: episodes.data,
+        season: seasons.data,
+        isLoading: false,
+      });
+    } else {
+      setData({
+        list: [],
+        season: [],
+        isLoading: false,
+      });
+    }
   }, [showId]);
 
   useEffect(() => {
-    fetchDetails();
-  }, [fetchDetails]);
+    fetchEpisodes();
+  }, [fetchEpisodes]);
 
   return (
     <View style={styles.container}>

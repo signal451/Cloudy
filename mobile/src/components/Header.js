@@ -18,7 +18,7 @@ const Header = ({back, navigation}) => {
         <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
           <Image
             source={{
-              uri: user.image,
+              uri: user.profile_image,
             }}
             style={styles.image}
           />

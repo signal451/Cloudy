@@ -20,7 +20,7 @@ const Detail = route => {
 
   const addToCollection = () => {
     Toast.show({
-      type: 'info',
+      type: 'success',
       text1: 'Миний сан хэсэгт нэмэгдсэн',
       position: 'bottom',
       visibilityTime: 1500,

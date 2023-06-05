@@ -11,8 +11,6 @@ const Item = ({id, price, plan, plan_id, navigation}) => {
     : plan[0] + ' жилын эрх';
 
   const Transaction = async () => {
-    // this is the main thing gonna happen here for sure man
-
     await axios
       .post('http://10.0.2.2:3000/api/subscription', {
         client_id: id,

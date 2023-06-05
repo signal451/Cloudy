@@ -32,6 +32,7 @@ const getAllShows = async (req, res) => {
                 title: true,
                 description: true,
                 visible: true,
+                cover_image: true,
                 featured_image: true,
                 trending_image: true,
               },

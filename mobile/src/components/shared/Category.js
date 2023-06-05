@@ -2,6 +2,8 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Carousel from './Carousel';
 
+// use react context api here ...
+
 const Category = ({name, data}) => {
   return (
     <View style={styles.container}>

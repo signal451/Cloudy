@@ -97,6 +97,7 @@ const postUserSubscription = async (req, res) => {
 const getUserSubscription = async (req, res) => {
   try {
     const { userId } = req.params
+    console.log(userId)
     const subscription = await checkSubscriptionIsExist(parseInt(userId))
 
     if (subscription == null) {

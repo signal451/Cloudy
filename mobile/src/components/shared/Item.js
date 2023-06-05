@@ -5,12 +5,14 @@ import {ShowsContext} from '../../pages/home';
 const Item = props => {
   const navigation = useContext(ShowsContext);
 
+  // ene baliar ydargaatai props tei ymnuudiig ynzalna aa
+
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate('ContentDetails', {
-            showId: props.id,
+            showId: props.show_id,
             title: props.title,
             description: props.description,
             cover: props.cover_image,

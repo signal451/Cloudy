@@ -58,7 +58,7 @@ const Login = ({navigation}) => {
           if (err.request.status === 400) {
             displayToast(
               {
-                text1: 'Нууц үг буруу',
+                text1: 'Нууц үг буруу байна',
               },
               'error',
             );

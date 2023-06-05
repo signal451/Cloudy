@@ -17,6 +17,8 @@ const Profile = ({navigation}) => {
 
   const [{user, setUser, subscription}] = useContext(AuthContext);
 
+  console.log('profile render go2');
+
   return (
     <View style={styles.container}>
       <View
@@ -26,7 +28,7 @@ const Profile = ({navigation}) => {
         }}>
         <Image
           source={{
-            uri: user.image,
+            uri: user.profile_image,
           }}
           style={styles.profile}
         />

@@ -18,7 +18,6 @@ const Home = ({navigation}) => {
 
   const [data, setData] = useState({
     items: [],
-    trending: [],
     isLoading: true,
   });
 
@@ -38,7 +37,7 @@ const Home = ({navigation}) => {
       });
 
     const subscription = await axios
-      .get(`http://10.0.2.2:3000/api/subscription/${user.id}`)
+      .get(`http://10.0.2.2:3000/api/subscription/${user.client_id}`)
       .catch(function (err) {
         if (err.response) {
           console.log(err.response.status);
@@ -47,15 +46,12 @@ const Home = ({navigation}) => {
         }
       });
 
-    let temp = [];
-
     setSubscription(subscription.data);
     setData({
       items: shows.data,
-      trending: temp,
       isLoading: false,
     });
-  }, [user.id, setSubscription]);
+  }, [user.client_id, setSubscription]);
 
   useEffect(() => {
     fetchData();
@@ -66,23 +62,21 @@ const Home = ({navigation}) => {
       <ShowsContext.Provider value={navigation}>
         <FlatList
           horizontal={false}
-          ListHeaderComponent={
-            <HorizontalList data={data.trending} navigate={'ContentDetails'} />
-          }
+          // ListHeaderComponent={
+          //   <HorizontalList data={data.trending} navigate={'ContentDetails'} />
+          // }
           data={data.items}
           nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           renderItem={({item}) => {
-            if (item.category !== 'Онцлох') {
-              return <Category name={item.category} data={item.contents} />;
-            }
+            return <Category name={item.title} data={item.shows} />;
           }}
           contentContainerStyle={{
             paddingBottom: 30,
           }}
           refreshing={data.isLoading}
           onRefresh={fetchData}
-          keyExtractor={item => item.id.toString()}
+          keyExtractor={(item, index) => index.toString()}
         />
       </ShowsContext.Provider>
     </SafeAreaView>
