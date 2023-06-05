@@ -6,6 +6,8 @@ const {
   getCurrentDate,
 } = require("../util/util")
 
+// some kind of problem lies in here
+
 const checkSubscriptionIsExist = async (id) => {
   const subscription = await prisma.subscriptions.findFirst({
     select: {
@@ -31,7 +33,7 @@ const postUserSubscription = async (req, res) => {
     const subscription = await checkSubscriptionIsExist(parseInt(client_id))
     const plan = await prisma.subscription_plan.findFirst({
       where: {
-        id: plan_id,
+        id: parseInt(plan_id),
       },
     })
 
@@ -43,7 +45,7 @@ const postUserSubscription = async (req, res) => {
 
     if (subscription == null) {
       const end_date = addMonth(plan.plan_details[0], "current")
-      await prisma.subscriptions
+      const newSubsription = await prisma.subscriptions
         .create({
           data: {
             client_id: client_id,
@@ -53,16 +55,16 @@ const postUserSubscription = async (req, res) => {
             created_at: getCurrentDate(),
           },
         })
-        .then((response) => {
-          return res.json({
-            id: response.id,
-            isSubscriptionActive: true,
-          })
-        })
         .catch((err) => {
           console.log("subscription avahad aldaa garlaa")
           console.error(err)
         })
+
+      return res.json({
+        id: newSubsription.id,
+        isSubscriptionActive: true,
+        totalDays: calculateMonthDifferences(end_date),
+      })
     }
     // something is wrong there cuz full one day date is not correctly calculating
     const leftOverDate = addDays(
@@ -71,23 +73,21 @@ const postUserSubscription = async (req, res) => {
 
     const updatedDate = addMonth(leftOverDate, "new", plan.plan_details[0])
 
-    await prisma.subscriptions
-      .create({
-        data: {
-          client_id: client_id,
-          start_date: getCurrentDate(),
-          end_date: updatedDate,
-          plan_id: plan_id,
-          created_at: getCurrentDate(),
-        },
-      })
-      .then((response) => {
-        return res.json({
-          id: response.id,
-          isSubscriptionActive: true,
-          totalDays: calculateMonthDifferences(updatedDate),
-        })
-      })
+    const reSubscribe = await prisma.subscriptions.create({
+      data: {
+        client_id: client_id,
+        start_date: getCurrentDate(),
+        end_date: updatedDate,
+        plan_id: plan_id,
+        created_at: getCurrentDate(),
+      },
+    })
+
+    return res.json({
+      id: reSubscribe.id,
+      isSubscriptionActive: true,
+      totalDays: calculateMonthDifferences(updatedDate),
+    })
   } catch (err) {
     console.error(err)
     return res.status(500).send({ message: "Something went wrong in server" })
@@ -97,7 +97,6 @@ const postUserSubscription = async (req, res) => {
 const getUserSubscription = async (req, res) => {
   try {
     const { userId } = req.params
-    console.log(userId)
     const subscription = await checkSubscriptionIsExist(parseInt(userId))
 
     if (subscription == null) {

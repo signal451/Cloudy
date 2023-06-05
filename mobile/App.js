@@ -37,7 +37,6 @@ const App = () => {
       const data = await AsyncStorage.getItem('@access');
       if (data !== null) {
         const temp = JSON.parse(data);
-        console.log(temp);
         setUser(temp);
       }
     } catch (e) {

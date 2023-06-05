@@ -10,21 +10,31 @@ const Item = ({id, price, plan, plan_id, navigation}) => {
     ? plan[0] + ' сарын эрх'
     : plan[0] + ' жилын эрх';
 
+  const [{setSubscription}] = useContext(AuthContext);
+
   const Transaction = async () => {
     await axios
       .post('http://10.0.2.2:3000/api/subscription', {
         client_id: id,
         plan_id: plan_id,
-        plan_detail: plan,
       })
       .then(response => {
+        setSubscription(response.data);
         Toast.show({
           type: 'success',
           text1: `Амжилттай ${plan_detail} авлаа`,
-          text2: 'Хүссэн цувралаа та хязгааргүй үзэх болно',
+          text2: 'Хүссэн цувралаа та хязгааргүй үзэх боломжтой боллоо',
         });
 
         navigation.navigate('MainScreen');
+      })
+      .catch(err => {
+        if (err.response) {
+          console.log('error on getting subscription');
+          console.log(err.response.status);
+        } else {
+          console.log('Error', err.message);
+        }
       });
   };
   return (
@@ -35,7 +45,6 @@ const Item = ({id, price, plan, plan_id, navigation}) => {
   );
 };
 
-// get subscription process is kinda of slow
 const Subscription = ({navigation}) => {
   const [data, setData] = useState({
     list: [],
@@ -82,7 +91,7 @@ const Subscription = ({navigation}) => {
           renderItem={({item, index}) => {
             return (
               <Item
-                id={user.id}
+                id={user.client_id}
                 plan_id={item.id}
                 price={item.plan_price}
                 plan={item.plan_details}

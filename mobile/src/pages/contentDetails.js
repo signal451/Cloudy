@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
 import {ActivityIndicator, MD2Colors} from 'react-native-paper';
 import Detail from '../components/Detail';
-import Preview from '../components/shared/Preview';
+import Preview from '../components/shared/EpisodePreview';
 import axios from 'axios';
 
 const Content = ({route, navigation}) => {
@@ -29,7 +29,6 @@ const Content = ({route, navigation}) => {
       });
 
     if (seasons.data.length > 0) {
-      // if there's season exist then we gotta fetch episode data
       const episodes = await axios
         .get(`http://10.0.2.2:3000/api/season/${seasons.data[0].num}`)
         .catch(function (err) {
