@@ -13,8 +13,6 @@ const Content = ({route, navigation}) => {
     isLoading: true,
   });
 
-  // so there is bug
-
   const fetchEpisodes = useCallback(async () => {
     setData({
       isLoading: true,
