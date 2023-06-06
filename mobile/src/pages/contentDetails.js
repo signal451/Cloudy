@@ -13,6 +13,8 @@ const Content = ({route, navigation}) => {
     isLoading: true,
   });
 
+  // so there is bug
+
   const fetchEpisodes = useCallback(async () => {
     setData({
       isLoading: true,
@@ -30,10 +32,9 @@ const Content = ({route, navigation}) => {
 
     if (seasons.data.length > 0) {
       const episodes = await axios
-        .get(`http://10.0.2.2:3000/api/season/${seasons.data[0].num}`)
+        .get(`http://10.0.2.2:3000/api/season/${showId}/${seasons.data[0].num}`)
         .catch(function (err) {
           if (err.response) {
-            // server error response ...
             console.log(err.response.status);
           } else {
             console.log('Error', err.message);

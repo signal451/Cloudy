@@ -6,8 +6,6 @@ const {
   getCurrentDate,
 } = require("../util/util")
 
-// some kind of problem lies in here
-
 const checkSubscriptionIsExist = async (id) => {
   const subscription = await prisma.subscriptions.findFirst({
     select: {
