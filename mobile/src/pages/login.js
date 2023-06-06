@@ -62,10 +62,16 @@ const Login = ({navigation}) => {
               },
               'error',
             );
-            setIsLoading(false);
-          } else {
-            console.error(err);
           }
+          if (err.request.status === 404) {
+            displayToast(
+              {
+                text1: 'Хэрэглэгч бүртгэлгүй байна',
+              },
+              'error',
+            );
+          }
+          setIsLoading(false);
         });
     } else {
       displayToast(
