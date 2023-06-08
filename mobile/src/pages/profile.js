@@ -17,6 +17,9 @@ const Profile = ({navigation}) => {
 
   const [{user, setUser, subscription}] = useContext(AuthContext);
 
+  // TODO
+  //     1. make this part as component
+
   return (
     <View style={styles.container}>
       <View
@@ -50,19 +53,6 @@ const Profile = ({navigation}) => {
             </View>
           </View>
         </TouchableOpacity>
-      </View>
-      <View style={[styles.field, {marginTop: 15}]}>
-        <View style={[styles.content, {paddingTop: 5, paddingBottom: 5}]}>
-          <View style={styles.description}>
-            <View style={{paddingRight: 15, paddingLeft: 15}}>
-              <Icon name="qrcode" size={24} color="white" />
-            </View>
-            <Text style={styles.payment}>Төлбөрийн жагсаалт</Text>
-          </View>
-          <View style={{paddingRight: 15}}>
-            <Icon name="chevron-right" size={24} color="white" />
-          </View>
-        </View>
       </View>
       <View style={[styles.field, {marginTop: 15}]}>
         <TouchableOpacity

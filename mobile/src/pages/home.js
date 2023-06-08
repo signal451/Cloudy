@@ -21,36 +21,34 @@ const Home = ({navigation}) => {
     isLoading: true,
   });
 
+  console.log('outside of the function');
+
   const fetchData = useCallback(async () => {
     setData({
       isLoading: true,
     });
 
-    const shows = await axios
-      .get('http://10.0.2.2:3000/api/shows/')
-      .catch(function (err) {
-        if (err.response) {
-          console.log(err.response.status);
-        } else {
-          console.log('Error', err.message);
-        }
-      });
+    console.log('fetch');
 
-    const subscription = await axios
-      .get(`http://10.0.2.2:3000/api/subscription/${user.client_id}`)
-      .catch(function (err) {
-        if (err.response) {
-          console.log(err.response.status);
-        } else {
-          console.log('Error', err.message);
-        }
-      });
+    const fetchShowsData = axios.get('http://10.0.2.2:3000/api/shows/');
+    const fetchSubscriptionData = axios.get(
+      `http://10.0.2.2:3000/api/subscription/${user.client_id}`,
+    );
 
-    setSubscription(subscription.data);
-    setData({
-      items: shows.data,
-      isLoading: false,
-    });
+    Promise.all([fetchShowsData, fetchSubscriptionData])
+      .then(responses => {
+        const shows = responses[0].data;
+        const subscription = responses[1].data;
+
+        setSubscription(subscription);
+        setData({
+          items: shows,
+          isLoading: false,
+        });
+      })
+      .catch(error => {
+        console.error('Error on fetching data:', error.message);
+      });
   }, [user.client_id, setSubscription]);
 
   useEffect(() => {
