@@ -12,6 +12,7 @@ const Item = props => {
             title: props.title,
             description: props.description,
             cover: props.cover_image,
+            dest: 'Collection',
           })
         }>
         <Image

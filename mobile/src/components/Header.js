@@ -3,16 +3,22 @@ import {StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Appbar} from 'react-native-paper';
 import {AuthContext} from '../../App';
 
-const Header = ({back, navigation}) => {
+const Header = ({back, navigation, route}) => {
   const [{user}] = useContext(AuthContext);
+
+  const goBack = () => {
+    if (route.params.dest) {
+      navigation.goBack();
+      navigation.navigate(route.params.dest);
+    } else {
+      return navigation.goBack();
+    }
+  };
+
   return (
     <Appbar.Header style={styles.background}>
       {back ? (
-        <Appbar.BackAction
-          onPress={navigation.goBack}
-          color="white"
-          size={25}
-        />
+        <Appbar.BackAction onPress={goBack} color="white" size={25} />
       ) : (
         <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
           <Image
