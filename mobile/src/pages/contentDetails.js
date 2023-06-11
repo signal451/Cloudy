@@ -75,7 +75,7 @@ const Content = ({route, navigation}) => {
           horizontal={false}
           data={data.list}
           ListHeaderComponent={
-            <Detail {...route} navigator={navigation} file={data.list} />
+            <Detail {...route} navigator={navigation} videos={data.list} />
           }
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => {

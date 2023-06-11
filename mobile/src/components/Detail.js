@@ -17,6 +17,7 @@ const {height} = Dimensions.get('screen');
 
 const Detail = route => {
   const {title, description, cover} = route.params;
+  const {videos, navigator} = route;
 
   const addToCollection = () => {
     Toast.show({
@@ -25,6 +26,14 @@ const Detail = route => {
       position: 'bottom',
       visibilityTime: 1500,
     });
+  };
+
+  const watch = () => {
+    if (videos.length > 0) {
+      navigator.navigate('Watch', {
+        videoURL: videos[0].file,
+      });
+    }
   };
 
   return (
@@ -54,6 +63,7 @@ const Detail = route => {
           text={'Шууд үзэх'}
           color={'black'}
           icon={'play'}
+          callback={watch}
           style={styles.playButton}
         />
 

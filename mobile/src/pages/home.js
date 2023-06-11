@@ -21,14 +21,10 @@ const Home = ({navigation}) => {
     isLoading: true,
   });
 
-  console.log('outside of the function');
-
   const fetchData = useCallback(async () => {
     setData({
       isLoading: true,
     });
-
-    console.log('fetch');
 
     const fetchShowsData = axios.get('http://10.0.2.2:3000/api/shows/');
     const fetchSubscriptionData = axios.get(

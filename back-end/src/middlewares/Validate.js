@@ -63,4 +63,22 @@ const signUpValidation = (req, res, next) => {
   return next()
 }
 
-module.exports = { signUpValidation, logInValidation }
+const libraryAddValidation = (req, res, next) => {
+  const schema = Joi.object({
+    client_id: Joi.number().required(),
+    show_id: Joi.number().required(),
+  })
+  const { value, error } = schema.validate({
+    client_id: req.body.client_id,
+    show_id: req.body.show_id,
+  })
+
+  if (error) {
+    return res.status(400).send({
+      message: error.details[0].message,
+    })
+  }
+  return next()
+}
+
+module.exports = { signUpValidation, logInValidation, libraryAddValidation }

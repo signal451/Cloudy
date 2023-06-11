@@ -53,6 +53,9 @@ const MainBottomTabNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarStyle: {
+          marginBottom: 10,
+        },
       }}
       initialRouteName="Main">
       <Tab.Screen
@@ -71,7 +74,9 @@ const MainBottomTabNavigator = () => {
             if (routeName === 'Watch') {
               return {display: 'none'};
             }
-            return;
+            return {
+              marginBottom: 10,
+            };
           })(route),
         })}
       />
@@ -80,7 +85,7 @@ const MainBottomTabNavigator = () => {
         name="Library"
         component={CollectionStackScreen}
         options={{
-          tabBarLabel: 'Миний сан',
+          tabBarLabel: 'Миний Сан',
           tabBarLabelStyle: styles.text,
           tabBarActiveTintColor: '#FFFFFF',
           tabBarInactiveTintColor: '#808080',
@@ -95,7 +100,7 @@ const MainBottomTabNavigator = () => {
 
 const styles = StyleSheet.create({
   text: {
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato-Bold',
     color: 'white',
     fontSize: 12,
   },
