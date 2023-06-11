@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {View, StyleSheet, FlatList} from 'react-native';
-import {ActivityIndicator, MD2Colors} from 'react-native-paper';
+import {ActivityIndicator} from 'react-native-paper';
 import Detail from '../components/Detail';
 import Preview from '../components/shared/EpisodePreview';
 import axios from 'axios';
@@ -67,7 +67,7 @@ const Content = ({route, navigation}) => {
             alignItems: 'center',
           }}
           animating={true}
-          color={MD2Colors.red800}
+          color={'#c62828'}
           size={'large'}
         />
       ) : (

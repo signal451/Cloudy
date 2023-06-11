@@ -48,7 +48,7 @@ const CollectionStackScreen = () => {
   );
 };
 
-const MainBottomTabNavigator = () => {
+const MainBottomTabNavigator = ({navigation}) => {
   return (
     <Tab.Navigator
       screenOptions={{

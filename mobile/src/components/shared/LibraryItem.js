@@ -1,10 +1,8 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {StyleSheet, View, Image, TouchableWithoutFeedback} from 'react-native';
-import {ShowsContext} from '../../pages/home';
 
 const Item = props => {
-  const navigation = useContext(ShowsContext);
-
+  const navigation = props.navigator;
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback

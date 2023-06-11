@@ -57,7 +57,7 @@ const Detail = route => {
         />
       </View>
       <View style={styles.container}>
-        <Text style={styles.textTitle}> {title} </Text>
+        <Text style={styles.textTitle}>{title}</Text>
         <Button
           mode={'contained'}
           text={'Шууд үзэх'}

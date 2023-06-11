@@ -1,13 +1,9 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {View, StyleSheet, Image, Text, TouchableOpacity} from 'react-native';
-import {Toast} from 'react-native-toast-message/lib/src/Toast';
-import {AuthContext} from '../../../App';
 
 const Preview = props => {
   const {navigator, thumbnail, title, file} = props;
   const episode_num = props.num + 1;
-
-  // const [{subscription}] = useContext(AuthContext);
 
   const checkSubscription = () => {
     navigator.navigate('Watch', {

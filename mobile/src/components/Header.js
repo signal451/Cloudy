@@ -5,7 +5,6 @@ import {AuthContext} from '../../App';
 
 const Header = ({back, navigation}) => {
   const [{user}] = useContext(AuthContext);
-
   return (
     <Appbar.Header style={styles.background}>
       {back ? (

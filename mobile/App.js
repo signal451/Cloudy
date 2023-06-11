@@ -23,10 +23,13 @@ const Theme = {
 
 const Stack = createNativeStackNavigator();
 const AuthContext = createContext(null);
+const LibraryContext = createContext(null);
 
 const App = () => {
+  // optimize re-rendering of the context
   const [user, setUser] = useState(null);
   const [subscription, setSubscription] = useState(null);
+  const [userLibrary, setUserLibrary] = useState(null);
 
   useEffect(() => {
     checkLoginStatus();
@@ -54,74 +57,76 @@ const App = () => {
         <NavigationContainer theme={Theme}>
           <AuthContext.Provider
             value={[{user, setUser, subscription, setSubscription}]}>
-            <Stack.Navigator>
-              {user == null ? (
-                <Stack.Group>
-                  <Stack.Screen
-                    name="Login"
-                    component={Login}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="SignUp"
-                    component={SignUp}
-                    options={{
-                      title: 'Бүртгүүлэх',
-                      headerTitleAlign: 'center',
-                      headerTitleStyle: {
-                        fontFamily: 'Lato-Bold',
-                      },
-                      headerTintColor: 'white',
-                      headerStyle: {
-                        backgroundColor: '#07080F',
-                      },
-                    }}
-                  />
-                </Stack.Group>
-              ) : (
-                <Stack.Group>
-                  <Stack.Screen
-                    name="MainScreen"
-                    component={MainBottomTabNavigator}
-                    options={{
-                      headerShown: false,
-                    }}
-                  />
-                  <Stack.Screen
-                    name="ProfileScreen"
-                    options={{
-                      title: 'Миний хаяг',
-                      headerTitleAlign: 'left',
-                      headerTitleStyle: {
-                        fontFamily: 'Lato-Bold',
-                      },
-                      headerTintColor: 'white',
-                      headerStyle: {
-                        backgroundColor: '#07080F',
-                      },
-                    }}
-                    component={Profile}
-                  />
-                  <Stack.Screen
-                    name="GetSubscription"
-                    options={{
-                      title: 'Эрх сунгах',
-                      headerTitleAlign: 'center',
-                      headerTitleStyle: {
-                        fontFamily: 'Lato-Bold',
-                      },
-                      headerTintColor: 'white',
-                      headerStyle: {
-                        backgroundColor: '#07080F',
-                      },
-                    }}
-                    component={Subscription}
-                  />
-                </Stack.Group>
-              )}
-            </Stack.Navigator>
+            <LibraryContext.Provider value={[{userLibrary, setUserLibrary}]}>
+              <Stack.Navigator>
+                {user == null ? (
+                  <Stack.Group>
+                    <Stack.Screen
+                      name="Login"
+                      component={Login}
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="SignUp"
+                      component={SignUp}
+                      options={{
+                        title: 'Бүртгүүлэх',
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: {
+                          fontFamily: 'Lato-Bold',
+                        },
+                        headerTintColor: 'white',
+                        headerStyle: {
+                          backgroundColor: '#07080F',
+                        },
+                      }}
+                    />
+                  </Stack.Group>
+                ) : (
+                  <Stack.Group>
+                    <Stack.Screen
+                      name="MainScreen"
+                      component={MainBottomTabNavigator}
+                      options={{
+                        headerShown: false,
+                      }}
+                    />
+                    <Stack.Screen
+                      name="ProfileScreen"
+                      options={{
+                        title: 'Миний хаяг',
+                        headerTitleAlign: 'left',
+                        headerTitleStyle: {
+                          fontFamily: 'Lato-Bold',
+                        },
+                        headerTintColor: 'white',
+                        headerStyle: {
+                          backgroundColor: '#07080F',
+                        },
+                      }}
+                      component={Profile}
+                    />
+                    <Stack.Screen
+                      name="GetSubscription"
+                      options={{
+                        title: 'Эрх сунгах',
+                        headerTitleAlign: 'center',
+                        headerTitleStyle: {
+                          fontFamily: 'Lato-Bold',
+                        },
+                        headerTintColor: 'white',
+                        headerStyle: {
+                          backgroundColor: '#07080F',
+                        },
+                      }}
+                      component={Subscription}
+                    />
+                  </Stack.Group>
+                )}
+              </Stack.Navigator>
+            </LibraryContext.Provider>
           </AuthContext.Provider>
         </NavigationContainer>
       </SafeAreaProvider>

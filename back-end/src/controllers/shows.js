@@ -1,9 +1,7 @@
 const { prisma } = require("../config/client")
 
 const filterData = (arr) => {
-  console.time("shows data shape change")
   const filtered = []
-  // maybe I could use filter func ...
   for (const ele of arr) {
     if (ele.genre_has_show.length > 0) {
       const tempShowsArr = []
@@ -16,7 +14,6 @@ const filterData = (arr) => {
       })
     }
   }
-  console.timeEnd("shows data shape change")
   return filtered
 }
 
