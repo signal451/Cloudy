@@ -49,7 +49,7 @@ model genre {
 model my_library {
   library_id Int       @id @default(autoincrement())
   client_id  Int
-  show_id    Int?      @unique(map: "unique_show")
+  show_id    Int?
   created_at DateTime? @db.Timestamp(6)
   client     client    @relation(fields: [client_id], references: [client_id], onDelete: Cascade, map: "fk_client_library")
   shows      shows?    @relation(fields: [show_id], references: [show_id], onDelete: Cascade, map: "fk_library_show")
@@ -83,7 +83,7 @@ model shows {
   cover_image    String?          @db.VarChar
   trending_image String?          @db.VarChar(255)
   genre_has_show genre_has_show[]
-  my_library     my_library?
+  my_library     my_library[]
   season         season[]
   status         status           @relation(fields: [status_id], references: [id], onDelete: SetNull, map: "fk_show_status")
 }

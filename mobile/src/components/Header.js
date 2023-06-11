@@ -29,7 +29,6 @@ const Header = ({back, navigation, route}) => {
           />
         </TouchableOpacity>
       )}
-      <Appbar.Action icon="search" color="#FFFFFF" size={25} />
     </Appbar.Header>
   );
 };

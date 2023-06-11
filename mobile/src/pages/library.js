@@ -1,34 +1,34 @@
 import axios from 'axios';
 import React, {useContext, useEffect, useState} from 'react';
 import {View, FlatList} from 'react-native';
-import {AuthContext} from '../../App';
+import {AuthContext, LibraryContext} from '../../App';
 import Item from '../components/shared/LibraryItem';
 import {ActivityIndicator} from 'react-native-paper';
 
 const Library = ({navigation}) => {
-  const [myShows, setMyShows] = useState([
+  const [loading, setLoading] = useState([
     {
-      list: [],
-      isLoading: true,
+      is: true,
     },
   ]);
 
   const [{user}] = useContext(AuthContext);
+  const [{userLibrary, setUserLibrary}] = useContext(LibraryContext);
 
   useEffect(() => {
     const fetchData = async () => {
-      setMyShows({
-        isLoading: true,
+      setLoading({
+        is: true,
       });
 
       try {
         const shows = await axios.get(
           `http://10.0.2.2:3000/api/library/${user.client_id}`,
         );
-        setMyShows({
-          list: shows.data,
-          isLoading: false,
+        setLoading({
+          is: false,
         });
+        setUserLibrary(shows.data);
       } catch (err) {
         console.error(err);
         return;
@@ -36,15 +36,16 @@ const Library = ({navigation}) => {
     };
 
     fetchData();
-  }, [user.client_id]);
+  }, [user.client_id, setUserLibrary]);
 
   return (
     <View
       style={{
         flex: 1,
+        marginTop: 20,
         marginLeft: 10,
       }}>
-      {myShows.isLoading ? (
+      {loading.isLoading ? (
         <ActivityIndicator
           style={{
             flex: 2,
@@ -57,7 +58,7 @@ const Library = ({navigation}) => {
         />
       ) : (
         <FlatList
-          data={myShows.list}
+          data={userLibrary}
           numColumns={3}
           renderItem={({item}) => <Item {...item} navigator={navigation} />}
           keyExtractor={(item, index) => index.toString()}

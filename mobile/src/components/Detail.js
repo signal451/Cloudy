@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import ReadMore from '@fawazahmed/react-native-read-more';
 import {
   View,
@@ -12,6 +12,8 @@ import Icon from 'react-native-vector-icons/dist/Feather';
 import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
 import Button from './shared/Button';
 import {Toast} from 'react-native-toast-message/lib/src/Toast';
+import {AuthContext, LibraryContext} from '../../App';
+import axios from 'axios';
 
 const {height} = Dimensions.get('screen');
 
@@ -19,13 +21,26 @@ const Detail = route => {
   const {title, description, cover} = route.params;
   const {videos, navigator} = route;
 
-  const addToCollection = () => {
-    Toast.show({
-      type: 'success',
-      text1: 'Миний сан хэсэгт нэмэгдсэн',
-      position: 'bottom',
-      visibilityTime: 1500,
-    });
+  const [{user}] = useContext(AuthContext);
+  const [{userLibrary, setUserLibrary}] = useContext(LibraryContext);
+
+  const addToCollection = async () => {
+    await axios
+      .post('http://10.0.2.2:3000/api/library', {
+        client_id: user.client_id,
+        show_id: route.params.showId,
+      })
+      .then(response => {
+        if (response.status === 200) {
+          setUserLibrary(userLibrary.concat(route.params));
+          Toast.show({
+            type: 'success',
+            text1: 'Миний сан хэсэгт нэмэгдсэн',
+            position: 'top',
+            visibilityTime: 1500,
+          });
+        }
+      });
   };
 
   const watch = () => {
@@ -38,12 +53,7 @@ const Detail = route => {
 
   return (
     <View>
-      <OrientationLocker
-        orientation={PORTRAIT}
-        onDeviceChange={orientation =>
-          console.log('onDeviceChange', orientation)
-        }
-      />
+      <OrientationLocker orientation={PORTRAIT} />
       <View style={styles.cover}>
         <Image
           style={{

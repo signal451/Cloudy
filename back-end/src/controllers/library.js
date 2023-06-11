@@ -33,8 +33,8 @@ const addShowToLibrary = async (req, res) => {
     if (isExist == null) {
       const addedShow = await prisma.my_library.create({
         data: {
-          client_id: client_id,
-          show_id: show_id,
+          client_id: parseInt(client_id),
+          show_id: parseInt(show_id),
           created_at: getCurrentDate(),
         },
       })

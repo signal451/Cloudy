@@ -29,7 +29,7 @@ const App = () => {
   // optimize re-rendering of the context
   const [user, setUser] = useState(null);
   const [subscription, setSubscription] = useState(null);
-  const [userLibrary, setUserLibrary] = useState(null);
+  const [userLibrary, setUserLibrary] = useState([]);
 
   useEffect(() => {
     checkLoginStatus();
@@ -136,4 +136,4 @@ const App = () => {
 };
 
 export default App;
-export {AuthContext};
+export {AuthContext, LibraryContext};
