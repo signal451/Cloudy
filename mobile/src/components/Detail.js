@@ -18,7 +18,7 @@ import axios from 'axios';
 const {height} = Dimensions.get('screen');
 
 const Detail = route => {
-  const {title, description, cover} = route.params;
+  const {title, description, cover_image} = route.params;
   const {videos, navigator} = route;
 
   const [{user}] = useContext(AuthContext);
@@ -28,7 +28,7 @@ const Detail = route => {
     await axios
       .post('http://10.0.2.2:3000/api/library', {
         client_id: user.client_id,
-        show_id: route.params.showId,
+        show_id: route.params.show_id,
       })
       .then(response => {
         if (response.status === 200) {
@@ -62,7 +62,7 @@ const Detail = route => {
             resizeMode: 'cover',
           }}
           source={{
-            uri: cover,
+            uri: cover_image,
           }}
         />
       </View>

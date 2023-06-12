@@ -10,11 +10,11 @@ const Item = props => {
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate('ContentDetails', {
-            showId: props.show_id,
+            show_id: props.show_id,
             title: props.title,
             description: props.description,
             featured_image: props.featured_image,
-            cover: props.cover_image,
+            cover_image: props.cover_image,
           })
         }>
         <Image

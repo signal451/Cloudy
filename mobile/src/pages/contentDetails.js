@@ -6,7 +6,7 @@ import Preview from '../components/shared/EpisodePreview';
 import axios from 'axios';
 
 const Content = ({route, navigation}) => {
-  const {showId} = route.params;
+  const {show_id} = route.params;
   const [data, setData] = useState({
     list: [],
     totalSeason: [],
@@ -19,7 +19,7 @@ const Content = ({route, navigation}) => {
     });
 
     const seasons = await axios
-      .get(`http://10.0.2.2:3000/api/season/${showId}`)
+      .get(`http://10.0.2.2:3000/api/season/${show_id}`)
       .catch(function (err) {
         if (err.response) {
           console.log(err.response.status);
@@ -30,7 +30,9 @@ const Content = ({route, navigation}) => {
 
     if (seasons.data.length > 0) {
       const episodes = await axios
-        .get(`http://10.0.2.2:3000/api/season/${showId}/${seasons.data[0].num}`)
+        .get(
+          `http://10.0.2.2:3000/api/season/${show_id}/${seasons.data[0].num}`,
+        )
         .catch(function (err) {
           if (err.response) {
             console.log(err.response.status);
@@ -51,7 +53,7 @@ const Content = ({route, navigation}) => {
         isLoading: false,
       });
     }
-  }, [showId]);
+  }, [show_id]);
 
   useEffect(() => {
     fetchEpisodes();

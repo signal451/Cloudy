@@ -3,15 +3,16 @@ import {StyleSheet, View, Image, TouchableWithoutFeedback} from 'react-native';
 
 const Item = props => {
   const navigation = props.navigator;
+  console.log('show id: ' + props.show_id);
   return (
     <View style={styles.container}>
       <TouchableWithoutFeedback
         onPress={() =>
           navigation.navigate('ContentDetails', {
-            showId: props.show_id,
+            show_id: props.show_id,
             title: props.title,
             description: props.description,
-            cover: props.cover_image,
+            cover_image: props.cover_image,
             dest: 'Collection',
           })
         }>
